@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="계좌정보 입력과 주일경상비 이체파일 생성을 위한 메뉴입니다.">
+    <title>교회 재정 업무 | Excel Transfer</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+        color: #19352e;
+        background: #f5f7f4;
+      }
+
+      * { box-sizing: border-box; }
+
+      body { margin: 0; min-height: 100vh; }
+
+      header { border-bottom: 1px solid #dfe7df; background: #fff; }
+
+      .header-inner {
+        max-width: 1000px;
+        margin: auto;
+        padding: 24px 28px;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: .04em;
+      }
+
+      main { max-width: 1000px; margin: auto; padding: 76px 28px 64px; }
+
+      .eyebrow {
+        margin: 0 0 14px;
+        color: #527264;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: .12em;
+      }
+
+      h1 { margin: 0; font-size: clamp(28px, 5vw, 40px); letter-spacing: -.05em; }
+
+      .intro { margin: 18px 0 40px; color: #627269; line-height: 1.8; }
+
+      .menus { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+
+      .menu {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        min-height: 280px;
+        padding: 30px;
+        border: 1px solid #dce5dd;
+        border-radius: 18px;
+        background: #fff;
+      }
+
+      .icon {
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 26px;
+        border-radius: 14px;
+        background: #edf4ee;
+        color: #37664e;
+      }
+
+      svg { width: 25px; height: 25px; }
+
+      h2 { margin: 0 0 12px; font-size: clamp(18px, 2.5vw, 22px); letter-spacing: -.04em; }
+
+      .menu p { margin: 0 0 28px; color: #647269; font-size: 14px; line-height: 1.8; }
+
+      .status {
+        margin-top: auto;
+        padding: 6px 11px;
+        border-radius: 6px;
+        background: #f0f3ef;
+        color: #596b60;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .notice { margin: 26px 0 0; color: #647269; font-size: 13px; line-height: 1.8; }
+
+      footer {
+        max-width: 1000px;
+        margin: auto;
+        padding: 0 28px 32px;
+        color: #6c7a71;
+        font-size: 12px;
+      }
+
+      @media (max-width: 640px) {
+        main { padding-top: 44px; }
+        .menus { grid-template-columns: 1fr; gap: 16px; }
+        .menu { min-height: 250px; padding: 26px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-inner">EXCEL TRANSFER</div>
+    </header>
+    <main>
+      <p class="eyebrow">교회 재정 업무</p>
+      <h1>재정 업무 메뉴</h1>
+      <p class="intro">계좌정보 관리와 주일경상비 이체를 한곳에서 준비하세요.</p>
+
+      <nav class="menus" aria-label="재정 업무 메뉴">
+        <section class="menu" aria-labelledby="account-title">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <path d="M3 10h18M7 15h4"/>
+            </svg>
+          </div>
+          <h2 id="account-title">계좌정보-입력</h2>
+          <p>이체에 필요한 계좌정보를 입력하고 관리합니다.</p>
+          <span class="status">준비 중</span>
+        </section>
+
+        <section class="menu" aria-labelledby="transfer-title">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+              <path d="M14 3v6h6M8 14h8m-3-3 3 3-3 3"/>
+            </svg>
+          </div>
+          <h2 id="transfer-title">주일경상비-이체파일-생성</h2>
+          <p>주일경상비 내역으로 은행 이체용 파일을 생성합니다.</p>
+          <span class="status">준비 중</span>
+        </section>
+      </nav>
+
+      <p class="notice">현재 메뉴 화면을 준비했으며, 각 기능은 추후 추가할 예정입니다.</p>
+    </main>
+    <footer>Excel Transfer · 교회 재정 업무</footer>
+  </body>
+</html>
