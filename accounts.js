@@ -34,6 +34,9 @@ function render() {
   $('rows').replaceChildren();
   rows.forEach((row, index) => {
     const tr = document.createElement('tr');
+    const order = document.createElement('td');
+    order.textContent = String(index + 1);
+    tr.append(order);
     for (const key of ['bank', 'accountNumber', 'name', 'notes']) {
       const td = document.createElement('td'); td.textContent = row[key]; tr.append(td);
     }
