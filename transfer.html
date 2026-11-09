@@ -24,14 +24,8 @@
       <p id="source-info" class="hint">아직 계좌 원본을 불러오지 않았습니다.</p>
       <p class="hint">원본은 검색에만 사용합니다. 작업 목록을 바꾸거나 내보내도 Drive의 계좌정보는 변경되지 않습니다.</p>
     </section>
-    <section class="panel" aria-labelledby="search-heading">
-      <h2 id="search-heading">2. 계좌 검색</h2>
-      <form id="search-form"><label for="query">은행 · 계좌번호 · 이름 · 기타 중 일부 입력</label><div class="search-row"><input id="query" type="search" placeholder="예: 김석경, 교육위원회, 3333" autocomplete="off" disabled><button id="search" type="submit" disabled>검색 / Enter</button></div></form>
-      <p class="hint">1건이면 바로 추가하고, 2건 이상이면 선택 창을 표시합니다. 같은 계좌도 여러 번 추가할 수 있습니다.</p>
-    </section>
-    <p id="message" role="status" aria-live="polite">계좌 원본 JSON을 불러온 뒤 검색하세요.</p>
     <section class="panel" aria-labelledby="grid-heading">
-      <div class="heading"><h2 id="grid-heading">3. 작업 목록 <span id="grid-count">0건</span></h2><span id="dirty">변경 사항 없음</span></div>
+      <div class="heading"><h2 id="grid-heading">2. 작업 목록 <span id="grid-count">0건</span></h2><span id="dirty">변경 사항 없음</span></div>
       <div class="actions"><button id="export-json" disabled>JSON Export</button><label class="file-label">JSON Import<input id="import-json" type="file" accept=".json,application/json"></label><button id="export-excel" disabled>엑셀 생성 (.xlsx)</button><button id="clear" class="secondary" disabled>목록 비우기</button></div>
       <p class="hint">각 행에 원 단위 금액을 입력하세요. Enter를 누르면 다음 행 금액으로 이동합니다. JSON은 기타와 금액을 함께 보관하고, 엑셀은 은행·계좌번호·이름·금액 순서로 제목 행 없이 생성합니다.</p>
       <p id="amount-total" class="amount-total" aria-live="polite">합계 0원</p>
@@ -39,6 +33,14 @@
       <p id="empty" class="empty">추가된 항목이 없습니다.</p>
       <p class="hint">작업 목록은 이 페이지를 닫으면 사라집니다. JSON Export로 보관하면 나중에 이어서 작업할 수 있습니다.</p>
     </section>
+	
+    <section class="panel" aria-labelledby="search-heading">
+      <h2 id="search-heading">3. 계좌 검색</h2>
+      <form id="search-form"><label for="query">은행 · 계좌번호 · 이름 · 기타 중 일부 입력</label><div class="search-row"><input id="query" type="search" placeholder="예: 김석경, 교육위원회, 3333" autocomplete="off" disabled><button id="search" type="submit" disabled>검색 / Enter</button></div></form>
+      <p class="hint">1건이면 바로 추가하고, 2건 이상이면 선택 창을 표시합니다. 같은 계좌도 여러 번 추가할 수 있습니다.</p>
+    </section>
+    <p id="message" role="status" aria-live="polite">계좌 원본 JSON을 불러온 뒤 검색하세요.</p>
+
   </main>
   <dialog id="matches" aria-labelledby="matches-heading">
     <div class="heading"><h2 id="matches-heading">검색 결과 선택</h2><button id="close-matches" class="secondary">닫기</button></div>
