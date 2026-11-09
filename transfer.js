@@ -1,5 +1,5 @@
-import { parseAccounts, serializeAccounts } from './account-data.js';
-import { findAccounts, createTransferWorkbook } from './transfer-data.js';
+import { parseAccounts } from './account-data.js';
+import { findAccounts, createTransferWorkbook, parseAmount, parseTransferRows, serializeTransferRows } from './transfer-data.js';
 
 const CLIENT_ID = '166586757984-g0dchsm57vsd77v3kp9f2r1udi8doc4n.apps.googleusercontent.com';
 const $ = id => document.getElementById(id);
@@ -22,7 +22,7 @@ function controls() {
   $('query').disabled = busy || !source.length;
   $('search').disabled = busy || !source.length;
   for (const id of ['export-json', 'export-excel', 'clear']) $(id).disabled = busy || !rows.length;
-  $('grid-rows').querySelectorAll('button').forEach(button => button.disabled = busy);
+  $('grid-rows').querySelectorAll('button, input').forEach(control => control.disabled = busy);
   $('connection').textContent = connected ? 'Drive 연결됨' : '연결 안 됨';
 }
 
@@ -55,6 +55,25 @@ function renderGrid() {
     const tr = document.createElement('tr');
     const order = document.createElement('td'); order.textContent = String(index + 1); tr.append(order);
     cells(tr, row);
+    const amountCell = document.createElement('td');
+    const amount = document.createElement('input');
+    amount.className = 'amount-input'; amount.type = 'text'; amount.inputMode = 'numeric'; amount.autocomplete = 'off';
+    amount.placeholder = '금액 입력'; amount.setAttribute('aria-label', `${index + 1}번 ${row.name} 금액`);
+    amount.value = row.amount === null || row.amount === undefined ? '' : typeof row.amount === 'number' ? row.amount.toLocaleString('ko-KR') : row.amount;
+    amount.oninput = () => {
+      try { row.amount = parseAmount(amount.value); amount.removeAttribute('aria-invalid'); amount.title = ''; }
+      catch (error) { row.amount = amount.value; amount.setAttribute('aria-invalid', 'true'); amount.title = error.message; }
+      dirty = true; $('dirty').textContent = 'JSON 백업 필요'; renderTotal();
+    };
+    amount.onblur = () => { if (typeof row.amount === 'number') amount.value = row.amount.toLocaleString('ko-KR'); };
+    amount.onkeydown = event => {
+      if (event.key === 'Enter' && !event.isComposing) {
+        event.preventDefault();
+        const next = $('grid-rows').querySelectorAll('.amount-input')[index + 1];
+        if (next) next.focus(); else amount.blur();
+      }
+    };
+    amountCell.append(amount); tr.append(amountCell);
     const actions = document.createElement('td');
     const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'secondary'; remove.textContent = '삭제';
     remove.setAttribute('aria-label', `${index + 1}번 ${row.name} 삭제`);
@@ -64,11 +83,20 @@ function renderGrid() {
     };
     actions.append(remove); tr.append(actions); $('grid-rows').append(tr);
   });
-  controls();
+  renderTotal(); controls();
+}
+
+function renderTotal() {
+  let total = 0n, pending = 0;
+  for (const row of rows) {
+    try { const value = parseAmount(row.amount); if (value === null || value <= 0) pending++; else total += BigInt(value); }
+    catch { pending++; }
+  }
+  $('amount-total').textContent = `합계 ${total.toLocaleString('ko-KR')}원${pending ? ` · 금액 확인 필요 ${pending}건` : ''}`;
 }
 
 function add(row) {
-  rows.push({ ...row }); dirty = true; renderGrid();
+  rows.push({ ...row, amount: null }); dirty = true; renderGrid();
   message(`${row.bank} / ${row.name} 항목을 추가했습니다. 현재 ${rows.length}건입니다.`);
   $('query').value = ''; $('query').focus();
 }
@@ -89,9 +117,9 @@ async function run(action) {
   finally { busy = false; controls(); }
 }
 
-async function readLocal(file) {
+async function readLocal(file, parser = parseAccounts) {
   if (file.size > 5 * 1024 * 1024) throw new Error('5MB 이하의 JSON을 선택하세요.');
-  return parseAccounts(await file.text());
+  return parser(await file.text());
 }
 
 async function drive(path) {
@@ -187,16 +215,16 @@ function download(blob, name) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-$('export-json').onclick = () => {
+$('export-json').onclick = () => run(async () => {
   if (!rows.length) return;
-  download(new Blob([serializeAccounts(rows)], { type: 'application/json;charset=utf-8' }), `주일경상비_${dateSuffix()}.json`);
+  download(new Blob([serializeTransferRows(rows)], { type: 'application/json;charset=utf-8' }), `주일경상비_${dateSuffix()}.json`);
   dirty = false; renderGrid(); message(`${rows.length}건의 작업 목록 JSON을 내보냈습니다. 다운로드된 파일을 확인하세요.`);
-};
+});
 $('import-json').onchange = async event => {
   const file = event.target.files[0]; if (!file) return;
   if (rows.length && !await ask('하단 작업 목록을 JSON 파일의 내용으로 교체할까요? 필요한 내용은 먼저 JSON Export로 보관하세요.')) { event.target.value = ''; return; }
   await run(async () => {
-    const parsed = await readLocal(file); rows = parsed; dirty = false; renderGrid();
+    const parsed = await readLocal(file, parseTransferRows); rows = parsed; dirty = false; renderGrid();
     message(`${file.name}에서 작업 목록 ${rows.length}건을 불러왔습니다. 계좌 원본은 유지됩니다.`);
   });
   event.target.value = '';
@@ -207,7 +235,7 @@ $('export-excel').onclick = () => run(async () => {
   const workbook = createTransferWorkbook(window.XLSX, rows);
   const data = window.XLSX.write(workbook, { bookType: 'xlsx', type: 'array', compression: true });
   download(new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `주일경상비_${dateSuffix()}.xlsx`);
-  message(`은행·계좌번호·이름·기타 ${rows.length}건의 엑셀을 생성했습니다. 다운로드된 파일을 확인하세요.`);
+  message(`은행·계좌번호·이름·금액 ${rows.length}건의 엑셀을 생성했습니다. 다운로드된 파일을 확인하세요.`);
 });
 $('clear').onclick = async () => {
   if (!await ask(`작업 목록 ${rows.length}건을 모두 비울까요? 계좌 원본은 유지됩니다.`)) return;

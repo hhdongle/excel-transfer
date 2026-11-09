@@ -35,6 +35,9 @@ table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: lef
 th, td { padding: 14px 10px; border-bottom: 1px solid #e1e8e1; overflow-wrap: anywhere; max-width: 300px; }
 th { background: #f6f8f5; white-space: nowrap; }
 td.account-number { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.amount-input { width: 160px; text-align: right; font-variant-numeric: tabular-nums; }
+.amount-input[aria-invalid="true"] { border-color: #b33725; background: #fff0ed; }
+.amount-total { text-align: right; font-weight: 700; color: #285d45; }
 td button { padding: 7px 10px; white-space: nowrap; }
 .empty { text-align: center; color: #607167; padding: 18px; }
 .file-label { display: inline-block; }
