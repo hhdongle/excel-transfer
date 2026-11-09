@@ -1,9 +1,11 @@
 import { parseAccounts, serializeAccounts } from './account-data.js';
+import { sortedAccountView } from './accounts-sort.js';
 
 const CLIENT_ID = '166586757984-g0dchsm57vsd77v3kp9f2r1udi8doc4n.apps.googleusercontent.com';
 const SCOPE = 'https://www.googleapis.com/auth/drive.file';
 const $ = id => document.getElementById(id);
 let rows = [], editing = -1, dirty = false, token = '', expires = 0, current = null, busy = false;
+let sortKey = 'order', sortDirection = 'ascending';
 
 function message(text, error = false) {
   $('message').textContent = text;
@@ -32,7 +34,14 @@ function render() {
     $('file-info').append('연결된 파일: ', link);
   } else $('file-info').textContent = '현재 연결된 파일이 없습니다.';
   $('rows').replaceChildren();
-  rows.forEach((row, index) => {
+  document.querySelectorAll('[data-sort]').forEach(button => {
+    const active = button.dataset.sort === sortKey;
+    button.closest('th').setAttribute('aria-sort', active ? sortDirection : 'none');
+    button.querySelector('.sort-indicator').textContent = active ? (sortDirection === 'ascending' ? '▲' : '▼') : '↕';
+    const next = active && sortDirection === 'ascending' ? '내림차순' : '오름차순';
+    button.setAttribute('aria-label', `${button.dataset.label} ${next} 정렬`);
+  });
+  sortedAccountView(rows, sortKey, sortDirection).forEach(({ row, index }) => {
     const tr = document.createElement('tr');
     const order = document.createElement('td');
     order.textContent = String(index + 1);
@@ -179,6 +188,14 @@ $('account-form').onsubmit = event => {
   resetForm(); dirty = true; render(); message('목록에 반영했습니다. Drive에 저장하거나 JSON으로 다운로드하세요.');
 };
 $('cancel').onclick = resetForm;
+document.querySelectorAll('[data-sort]').forEach(button => {
+  button.onclick = () => {
+    if (busy) return;
+    const key = button.dataset.sort;
+    sortDirection = sortKey === key && sortDirection === 'ascending' ? 'descending' : 'ascending';
+    sortKey = key; render();
+  };
+});
 $('export').onclick = () => {
   const blob = new Blob([serializeAccounts(rows)], { type: 'application/json;charset=utf-8' });
   const url = URL.createObjectURL(blob), link = document.createElement('a');
