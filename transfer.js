@@ -1,5 +1,5 @@
 import { parseAccounts } from './account-data.js';
-import { findAccounts, createTransferWorkbook, parseAmount, parseTransferRows, serializeTransferRows } from './transfer-data.js';
+import { findAccounts, createTransferWorkbook, parseAmount, parseTransferRows, serializeTransferRows } from './transfer-data.js?v=20261109-export-feedback';
 
 const CLIENT_ID = '166586757984-g0dchsm57vsd77v3kp9f2r1udi8doc4n.apps.googleusercontent.com';
 const $ = id => document.getElementById(id);
@@ -8,6 +8,21 @@ let source = [], rows = [], token = '', expires = 0, busy = false, dirty = false
 function message(text, error = false) {
   $('message').textContent = text;
   $('message').classList.toggle('error', error);
+}
+
+function exportFeedback(text, error = false) {
+  $('export-message').hidden = false;
+  $('export-message').textContent = text;
+  $('export-message').classList.toggle('error', error);
+}
+
+function exportFailure(error) {
+  exportFeedback(`엑셀을 생성하지 못했습니다. ${error.message || '다시 시도하세요.'}`, true);
+  const input = Number.isInteger(error.rowIndex) ? $('grid-rows').querySelectorAll('.amount-input')[error.rowIndex] : null;
+  if (input) {
+    input.setAttribute('aria-invalid', 'true'); input.title = error.message;
+    input.focus(); input.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+  } else $('export-message').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 
 function controls() {
@@ -64,6 +79,7 @@ function renderGrid() {
       try { row.amount = parseAmount(amount.value); amount.removeAttribute('aria-invalid'); amount.title = ''; }
       catch (error) { row.amount = amount.value; amount.setAttribute('aria-invalid', 'true'); amount.title = error.message; }
       dirty = true; $('dirty').textContent = 'JSON 백업 필요'; renderTotal();
+      $('export-message').hidden = true;
     };
     amount.onblur = () => { if (typeof row.amount === 'number') amount.value = row.amount.toLocaleString('ko-KR'); };
     amount.onkeydown = event => {
@@ -109,12 +125,14 @@ function setSource(parsed, name) {
   message(source.length ? `계좌 원본 ${source.length}건을 불러왔습니다. 검색어를 입력하고 Enter를 누르세요.` : '원본 JSON은 빈 목록입니다. 계좌정보가 있는 파일을 불러오세요.');
 }
 
-async function run(action) {
+async function run(action, onError = error => message(error.message || '처리에 실패했습니다.', true)) {
   if (busy) return;
   busy = true; controls();
+  let failure;
   try { await action(); }
-  catch (error) { message(error.message || '처리에 실패했습니다.', true); }
+  catch (error) { failure = error; }
   finally { busy = false; controls(); }
+  if (failure) onError(failure);
 }
 
 async function readLocal(file, parser = parseAccounts) {
@@ -235,8 +253,9 @@ $('export-excel').onclick = () => run(async () => {
   const workbook = createTransferWorkbook(window.XLSX, rows);
   const data = window.XLSX.write(workbook, { bookType: 'xlsx', type: 'array', compression: true });
   download(new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `주일경상비_${dateSuffix()}.xlsx`);
-  message(`은행·계좌번호·이름·금액 ${rows.length}건의 엑셀을 생성했습니다. 다운로드된 파일을 확인하세요.`);
-});
+  const text = `은행·계좌번호·이름·금액 ${rows.length}건의 엑셀을 생성했습니다. 다운로드된 파일을 확인하세요.`;
+  message(text); exportFeedback(text);
+}, exportFailure);
 $('clear').onclick = async () => {
   if (!await ask(`작업 목록 ${rows.length}건을 모두 비울까요? 계좌 원본은 유지됩니다.`)) return;
   rows = []; dirty = true; renderGrid(); message('작업 목록을 비웠습니다.');

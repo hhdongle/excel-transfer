@@ -54,6 +54,13 @@ test('amounts accept integers and correctly grouped commas, reject malformed and
 test('XLSX export requires positive amounts in all rows', () => {
   for (const amount of [undefined, null, '', 0, -1, 'bad']) assert.throws(() => createTransferWorkbook(XLSX, [{ ...source[0], amount }]));
 });
+test('export errors identify the actual row to focus for missing or invalid amounts', () => {
+  for (const amount of [null, 0, 'invalid']) {
+    assert.throws(() => createTransferWorkbook(XLSX, [
+      { ...source[0], amount: 200000 }, { ...source[1], amount }
+    ]), error => error.rowIndex === 1 && error.message.includes('2번'));
+  }
+});
 test('XLSX matches four-column headerless layout and preserves typed amounts and text accounts', () => {
   const rows = source.map((row, index) => ({ ...row, amount: [200000, 7708000, 114385][index] }));
   const workbook = createTransferWorkbook(XLSX, rows);

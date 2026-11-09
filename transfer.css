@@ -29,6 +29,8 @@ input, select { min-width: 0; padding: 12px; border: 1px solid #b6c9bd; border-r
 .hint, footer, #connection, #dirty { font-size: 13px; color: #607167; }
 #message { padding: 14px 18px; background: #eaf2eb; border-radius: 9px; overflow-wrap: anywhere; }
 #message.error { background: #fff0ed; color: #922f20; }
+#export-message { padding: 14px 18px; background: #eaf2eb; border-radius: 9px; overflow-wrap: anywhere; }
+#export-message.error { background: #fff0ed; color: #922f20; border: 1px solid #e4b4a9; }
 #dirty { color: #75541c; }
 table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
 .table-scroll { overflow: auto; margin-top: 22px; }

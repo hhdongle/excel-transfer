@@ -26,9 +26,11 @@ export function parseTransferRows(text) {
   return data.map((row, index) => {
     if (!row || typeof row !== 'object' || Array.isArray(row)) throw new Error(`${index + 1}번 항목이 올바르지 않습니다.`);
     const { amount, ...account } = row;
-    const validated = parseAccounts(JSON.stringify([account]))[0];
-    try { return { ...validated, amount: parseAmount(amount) }; }
-    catch (error) { throw new Error(`${index + 1}번: ${error.message}`); }
+    try {
+      const validated = parseAccounts(JSON.stringify([account]))[0];
+      return { ...validated, amount: parseAmount(amount) };
+    }
+    catch (error) { throw Object.assign(new Error(`${index + 1}번: ${error.message}`), { rowIndex: index }); }
   });
 }
 
@@ -40,7 +42,7 @@ export function createTransferWorkbook(XLSX, rows) {
   if (!rows.length) throw new Error('작업 목록에 항목을 추가하세요.');
   const validated = parseTransferRows(JSON.stringify(rows));
   const missing = validated.findIndex(row => row.amount === null || row.amount <= 0);
-  if (missing >= 0) throw new Error(`${missing + 1}번 항목에 1원 이상의 금액을 입력하세요.`);
+  if (missing >= 0) throw Object.assign(new Error(`${missing + 1}번 항목에 1원 이상의 금액을 입력하세요.`), { rowIndex: missing });
   const values = validated.map(row => [row.bank, row.accountNumber, row.name, row.amount]);
   const sheet = XLSX.utils.aoa_to_sheet(values);
   sheet['!cols'] = [{ wch: 14 }, { wch: 24 }, { wch: 34 }, { wch: 18 }];
