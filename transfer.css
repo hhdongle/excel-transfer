@@ -52,4 +52,7 @@ dialog th { position: sticky; top: 0; }
 footer { padding-bottom: 32px !important; line-height: 1.8; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 [hidden] { display: none !important; }
+.toast { position: fixed; z-index: 1000; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 10px); max-width: calc(100vw - 36px); width: max-content; padding: 15px 22px; border-radius: 12px; background: #193f30; color: white; box-shadow: 0 6px 24px rgb(0 0 0 / 18%); font-size: 15px; line-height: 1.6; text-align: center; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity .18s, transform .18s, visibility .18s; }
+.toast.visible { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
 @media (max-width: 640px) { .wrap { padding-left: 18px; padding-right: 18px; } .panel, dialog { padding: 18px; } header span { display: none; } .file-row { align-items: stretch; } .file-row label { width: 100%; } }

@@ -4,6 +4,14 @@ import { findAccounts, createTransferWorkbook, parseAmount, parseTransferRows, s
 const CLIENT_ID = '166586757984-g0dchsm57vsd77v3kp9f2r1udi8doc4n.apps.googleusercontent.com';
 const $ = id => document.getElementById(id);
 let source = [], rows = [], token = '', expires = 0, busy = false, dirty = false;
+let toastTimer;
+
+function showToast(text) {
+  clearTimeout(toastTimer);
+  $('toast').textContent = text;
+  $('toast').classList.add('visible');
+  toastTimer = setTimeout(() => $('toast').classList.remove('visible'), 3000);
+}
 
 function message(text, error = false) {
   $('message').textContent = text;
@@ -113,7 +121,8 @@ function renderTotal() {
 
 function add(row) {
   rows.push({ ...row, amount: null }); dirty = true; renderGrid();
-  message(`${row.bank} / ${row.name} 항목을 추가했습니다. 현재 ${rows.length}건입니다.`);
+  message('다음 계좌를 검색하거나 작업 목록에 금액을 입력하세요.');
+  showToast(`${row.name} 항목이 추가되었습니다. 현재 ${rows.length}건`);
   $('query').value = ''; $('query').focus();
 }
 

@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>주일경상비 이체파일 생성 | Excel Transfer</title>
-  <link rel="stylesheet" href="transfer.css?v=20261109-export-feedback">
+  <link rel="stylesheet" href="transfer.css?v=20261109-toast">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="vendor/xlsx-style.bundle.js" defer></script>
-  <script type="module" src="transfer.js?v=20261109-export-feedback"></script>
+  <script type="module" src="transfer.js?v=20261109-toast"></script>
 </head>
 <body>
   <header><div class="wrap"><a href="index.html">EXCEL TRANSFER</a><span>교회 재정 업무</span></div></header>
@@ -51,5 +51,6 @@
   </dialog>
   <dialog id="confirm-dialog" aria-labelledby="confirm-heading"><h2 id="confirm-heading">작업 목록 확인</h2><p id="confirm-text"></p><div class="actions"><button id="confirm-yes">계속</button><button id="confirm-no" class="secondary" autofocus>취소</button></div></dialog>
   <footer class="wrap">계좌번호는 문자열로, 금액은 숫자로 저장합니다. 엑셀은 은행·계좌번호·이름·금액 네 열에 테두리와 천 단위 쉼표를 적용하며 노란색 강조는 넣지 않습니다.</footer>
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 </body>
 </html>
