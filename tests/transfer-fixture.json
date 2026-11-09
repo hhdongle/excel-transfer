@@ -1,0 +1,5 @@
+[
+  { "bank": "테스트은행", "accountNumber": "001234567890123456", "name": "테스트하나", "notes": "교육위원회" },
+  { "bank": "가상은행", "accountNumber": "00987654321", "name": "테스트둘", "notes": "교육부 ABC" },
+  { "bank": "가상은행", "accountNumber": "003333", "name": "테스트셋", "notes": "다른 부서" }
+]

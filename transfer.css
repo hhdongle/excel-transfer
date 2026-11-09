@@ -1,0 +1,50 @@
+:root { color-scheme: light; font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; color: #19352e; background: #f5f7f4; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+.wrap { max-width: 1120px; margin: auto; padding: 0 28px; }
+header { background: white; border-bottom: 1px solid #dfe7df; }
+header .wrap { display: flex; justify-content: space-between; gap: 20px; padding-top: 24px; padding-bottom: 24px; }
+a { color: #285d45; text-underline-offset: 4px; }
+header a { font-weight: 700; text-decoration: none; }
+main { padding-top: 36px !important; padding-bottom: 32px !important; }
+h1 { font-size: clamp(26px, 5vw, 36px); margin-bottom: 12px; letter-spacing: -.04em; }
+h2 { font-size: 20px; margin: 0; }
+p { line-height: 1.8; }
+.intro { margin-bottom: 30px; color: #607167; }
+.panel { padding: 26px; background: white; border: 1px solid #dce5dd; border-radius: 16px; margin-bottom: 22px; }
+.heading, .actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.heading { justify-content: space-between; margin-bottom: 18px; }
+.actions { margin-top: 16px; }
+button, input, select { font: inherit; }
+button, .file-label { border: 1px solid #285d45; background: #285d45; color: white; padding: 11px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; }
+button.secondary, .file-label { background: white; color: #285d45; border-color: #c8d6cc; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button:not(:disabled):hover, .file-label:hover { filter: brightness(.94); }
+:focus-visible { outline: 3px solid #aa7618; outline-offset: 3px; }
+label { font-size: 14px; font-weight: 700; }
+input, select { min-width: 0; padding: 12px; border: 1px solid #b6c9bd; border-radius: 7px; background: white; color: #19352e; }
+.file-row, .search-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+.file-row select { flex: 1; min-width: 180px; }
+.search-row input { flex: 1; min-width: 160px; }
+.hint, footer, #connection, #dirty { font-size: 13px; color: #607167; }
+#message { padding: 14px 18px; background: #eaf2eb; border-radius: 9px; overflow-wrap: anywhere; }
+#message.error { background: #fff0ed; color: #922f20; }
+#dirty { color: #75541c; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
+.table-scroll { overflow: auto; margin-top: 22px; }
+th, td { padding: 14px 10px; border-bottom: 1px solid #e1e8e1; overflow-wrap: anywhere; max-width: 300px; }
+th { background: #f6f8f5; white-space: nowrap; }
+td.account-number { white-space: nowrap; font-variant-numeric: tabular-nums; }
+td button { padding: 7px 10px; white-space: nowrap; }
+.empty { text-align: center; color: #607167; padding: 18px; }
+.file-label { display: inline-block; }
+.file-label input { display: block; width: 100%; margin-top: 8px; font-weight: normal; font-size: 12px; }
+dialog { width: min(980px, calc(100% - 28px)); max-height: 85vh; padding: 26px; border: 1px solid #c8d6cc; border-radius: 16px; color: #19352e; }
+dialog::backdrop { background: rgb(15 35 28 / 45%); }
+dialog .table-scroll { max-height: 52vh; }
+dialog th { position: sticky; top: 0; }
+#confirm-dialog { max-width: 500px; }
+footer { padding-bottom: 32px !important; line-height: 1.8; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+[hidden] { display: none !important; }
+@media (max-width: 640px) { .wrap { padding-left: 18px; padding-right: 18px; } .panel, dialog { padding: 18px; } header span { display: none; } .file-row { align-items: stretch; } .file-row label { width: 100%; } }

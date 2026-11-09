@@ -1,5 +1,20 @@
 # excel-transfer
 
+## 주일경상비 작업 목록
+
+메인 메뉴의 주일경상비-이체파일-생성은 `transfer.html`로 연결됩니다. 계좌정보 입력 페이지와 관련 파일은 이 기능을 추가하면서 변경하지 않았습니다.
+
+1. Drive 연결 후 계좌 원본 JSON을 선택하거나 PC의 계좌 JSON을 불러옵니다. Drive 원본은 읽기만 합니다.
+2. 은행·계좌번호·이름·기타 중 일부를 입력하고 Enter를 누릅니다. 각 필드 안의 문자열 포함 여부로 검색하며 영문 대소문자는 구분하지 않습니다.
+3. 결과 0건은 안내 메시지, 1건은 즉시 추가, 2건 이상은 선택 팝업으로 처리합니다. 원본의 중복 항목을 유지하며 같은 항목을 여러 번 추가할 수 있습니다.
+4. 하단 작업 목록은 행 삭제, 전체 비우기, JSON Export/Import와 `.xlsx` 다운로드를 지원합니다. Import는 작업 목록을 교체하며 검색용 계좌 원본은 유지합니다.
+
+JSON과 엑셀에는 `bank`, `accountNumber`, `name`, `notes`에 해당하는 네 항목만 들어가고 화면 순번은 제외됩니다. 엑셀 헤더는 은행·계좌번호·이름·기타입니다. 계좌번호와 수식처럼 보이는 문자열도 텍스트로 저장합니다. 은행별 실제 이체 업로드 서식, 금액·은행 코드 등은 아직 요청받지 않아 포함하지 않았습니다.
+
+엑셀 생성은 공식 SheetJS CE 0.20.3의 브라우저용 mini 빌드를 프로젝트에 포함해 사용합니다. 출처: https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.mini.min.js. 라이선스는 `vendor/SheetJS-LICENSE.txt`에 있습니다. 엑셀·JSON 내보내기는 브라우저 내부에서 처리합니다. 실제 계좌 자료는 저장소에 포함하지 않습니다.
+
+검사: `node --test tests/account-data.test.mjs tests/transfer.test.mjs`
+
 GitHub Pages에서 사용하는 교회 재정 업무 메뉴와 계좌정보 입력 페이지입니다.
 
 ## Google Drive JSON 테스트
