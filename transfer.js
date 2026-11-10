@@ -93,8 +93,7 @@ function renderGrid() {
     amount.onkeydown = event => {
       if (event.key === 'Enter' && !event.isComposing) {
         event.preventDefault();
-        const next = $('grid-rows').querySelectorAll('.amount-input')[index + 1];
-        if (next) next.focus(); else amount.blur();
+        $('query').focus();
       }
     };
     amountCell.append(amount); tr.append(amountCell);
@@ -122,9 +121,10 @@ function renderTotal() {
 
 function add(row) {
   rows.push({ ...row, amount: null }); dirty = true; renderGrid();
-  message('다음 계좌를 검색하거나 작업 목록에 금액을 입력하세요.');
+  message('추가된 항목의 금액을 입력하고 Enter를 누르면 계좌 검색으로 돌아갑니다.');
   showToast(`${row.name} 항목이 추가되었습니다. 현재 ${rows.length}건`);
-  $('query').value = ''; $('query').focus();
+  $('query').value = '';
+  $('grid-rows').lastElementChild.querySelector('.amount-input').focus();
 }
 
 function setSource(parsed, name) {
@@ -238,9 +238,10 @@ $('search-form').onsubmit = event => {
     const tr = document.createElement('tr'); cells(tr, row);
     const td = document.createElement('td'), button = document.createElement('button');
     button.type = 'button'; button.textContent = '선택'; button.setAttribute('aria-label', `${row.bank} ${row.accountNumber} ${row.name} ${row.notes} 선택`);
-    button.onclick = () => { $('matches').close(); add(row); };
+    button.onclick = () => { $('matches').close('selected'); add(row); };
     td.append(button); tr.append(td); $('match-rows').append(tr);
   });
+  $('matches').returnValue = '';
   $('matches').showModal();
 };
 // Do not submit a search while Enter is still confirming Korean IME composition.
@@ -248,7 +249,9 @@ $('query').addEventListener('keydown', event => {
   if (event.key === 'Enter' && (event.isComposing || event.keyCode === 229)) event.preventDefault();
 });
 $('close-matches').onclick = () => $('matches').close();
-$('matches').addEventListener('close', () => $('query').focus());
+$('matches').addEventListener('close', () => {
+  if ($('matches').returnValue !== 'selected') $('query').focus();
+});
 
 function dateSuffix() { return new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' }).format(new Date()); }
 function download(blob, name) {

@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="transfer.css?v=20261109-toast">
   <link rel="stylesheet" href="cloud.css?v=20261110">
   <script src="vendor/xlsx-style.bundle.js" defer></script>
-  <script type="module" src="transfer.js?v=20261110-cloud"></script>
+  <script type="module" src="transfer.js?v=20261110-focus"></script>
 </head>
 <body>
   <header><div class="wrap"><a href="index.html">EXCEL TRANSFER</a><span>교회 재정 업무</span></div></header>
@@ -30,7 +30,7 @@
       <div class="heading"><h2 id="grid-heading">2. 작업 목록 <span id="grid-count">0건</span></h2><span id="dirty">변경 사항 없음</span></div>
       <div class="actions"><button id="export-json" disabled>JSON Export</button><label class="file-label">JSON Import<input id="import-json" type="file" accept=".json,application/json"></label><button id="export-excel" disabled>엑셀 생성 (.xlsx)</button><button id="clear" class="secondary" disabled>목록 비우기</button></div>
       <p id="export-message" role="status" aria-live="polite" hidden></p>
-      <p class="hint">모든 행에 1원 이상의 원 단위 금액을 입력해야 엑셀을 생성할 수 있습니다. Enter를 누르면 다음 행 금액으로 이동합니다. JSON은 기타와 금액을 함께 보관하고, 엑셀은 은행·계좌번호·이름·금액 순서로 제목 행 없이 생성합니다.</p>
+      <p class="hint">모든 행에 1원 이상의 원 단위 금액을 입력해야 엑셀을 생성할 수 있습니다. 항목을 추가하면 금액 입력란으로 이동하고, 금액 입력 후 Enter를 누르면 계좌 검색으로 돌아갑니다. JSON은 기타와 금액을 함께 보관하고, 엑셀은 은행·계좌번호·이름·금액 순서로 제목 행 없이 생성합니다.</p>
       <p id="amount-total" class="amount-total" aria-live="polite">합계 0원</p>
       <div class="table-scroll"><table><caption class="sr-only">주일경상비 작업 목록</caption><thead><tr><th scope="col">순번</th><th scope="col">은행</th><th scope="col">계좌번호</th><th scope="col">이름</th><th scope="col">기타</th><th scope="col">금액 (원)</th><th scope="col">관리</th></tr></thead><tbody id="grid-rows"></tbody></table></div>
       <p id="empty" class="empty">추가된 항목이 없습니다.</p>
