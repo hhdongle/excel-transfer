@@ -1,8 +1,16 @@
-import { parseTSV, serializeTSV, columnName } from './sheet-data.js';
+import { parseTSV, serializeTSV, columnName, sortSheetRows } from './sheet-data.js?v=20261110-convert';
 
 const MAX_ROWS = 2000, MAX_COLS = 100, MAX_CELLS = 40000;
 let hasData = false;
 const sheetsData = [];
+const sheetControllers = new Map();
+const sortEnabled = document.getElementById('sort-enabled');
+const sortColumn = document.getElementById('sort-column');
+const sortDirection = document.getElementById('sort-direction');
+const sortHeader = document.getElementById('sort-header');
+sortEnabled.onchange = () => {
+  for (const control of [sortColumn, sortDirection, sortHeader]) control.disabled = !sortEnabled.checked;
+};
 window.addEventListener('beforeunload', event => { if (hasData) { event.preventDefault(); event.returnValue = ''; } });
 
 for (const section of document.querySelectorAll('.sheet')) {
@@ -68,6 +76,11 @@ for (const section of document.querySelectorAll('.sheet')) {
     if (scroll) cell(...end)?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }
   function render() {
+    if (section.dataset.sheet === 'left') {
+      const selected = sortColumn.value;
+      sortColumn.replaceChildren(...Array.from({ length: width }, (_, c) => new Option(`${columnName(c)}열`, String(c))));
+      sortColumn.value = Number(selected) < width ? selected || '0' : '0';
+    }
     cellNodes.clear();
     const table = document.createElement('table'); table.setAttribute('role', 'grid'); table.setAttribute('aria-label', title);
     const head = table.createTHead().insertRow(); head.append(document.createElement('th'));
@@ -195,5 +208,31 @@ for (const section of document.querySelectorAll('.sheet')) {
       render(); status.textContent = `${height}행 × ${width}열로 늘렸습니다.`;
     }
   });
+  sheetControllers.set(section.dataset.sheet, {
+    snapshot() { finish(); return { data: new Map(data), height, width }; },
+    replace(snapshot) {
+      finish();
+      change('변경 결과 적용', () => {
+        data.clear(); for (const [id, text] of snapshot.data) data.set(id, text);
+        height = snapshot.height; width = snapshot.width; anchor = [0,0]; end = [0,0];
+      });
+      render(); viewport.scrollTop = 0; viewport.scrollLeft = 0;
+      viewport.focus({ preventScroll: true });
+      status.textContent = sortEnabled.checked ? `${columnName(Number(sortColumn.value))}열 ${sortDirection.selectedOptions[0].textContent} 정렬 결과입니다. Ctrl+Z로 되돌릴 수 있습니다.` : '변경 전 내용을 원래 순서대로 복사했습니다. Ctrl+Z로 되돌릴 수 있습니다.';
+    }
+  });
   render(); historyButtons();
 }
+
+document.getElementById('convert').onclick = () => {
+  const snapshot = sheetControllers.get('left').snapshot();
+  if (sortEnabled.checked && snapshot.data.size) {
+    const rowIndexes = Array.from(snapshot.data.keys(), id => Number(id.split(':')[0]));
+    const first = Math.min(...rowIndexes), last = Math.max(...rowIndexes);
+    const rows = Array.from({ length: last-first+1 }, (_, r) => Array.from({ length: snapshot.width }, (_, c) => snapshot.data.get(`${first+r}:${c}`) ?? ''));
+    const sorted = sortSheetRows(rows, Number(sortColumn.value), sortDirection.value === 'descending', sortHeader.checked);
+    snapshot.data.clear();
+    sorted.forEach((row,r) => row.forEach((text,c) => { if (text) snapshot.data.set(`${first+r}:${c}`, text); }));
+  }
+  sheetControllers.get('right').replace(snapshot);
+};

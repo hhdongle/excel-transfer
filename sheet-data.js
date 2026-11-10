@@ -31,3 +31,15 @@ export function columnName(index) {
   for (let n = index + 1; n > 0; n = Math.floor((n - 1) / 26)) name = String.fromCharCode(65 + (n - 1) % 26) + name;
   return name;
 }
+
+export function sortSheetRows(rows, column, descending = false, hasHeader = false) {
+  const header = hasHeader ? rows.slice(0, 1) : [];
+  const body = rows.slice(hasHeader ? 1 : 0);
+  const compare = new Intl.Collator('ko', { numeric: true, sensitivity: 'base' });
+  body.sort((a, b) => {
+    const left = a[column] ?? '', right = b[column] ?? '';
+    if (!left.trim() || !right.trim()) return !left.trim() === !right.trim() ? 0 : !left.trim() ? 1 : -1;
+    return compare.compare(left, right) * (descending ? -1 : 1);
+  });
+  return [...header, ...body].map(row => [...row]);
+}
