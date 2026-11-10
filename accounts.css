@@ -76,6 +76,10 @@ label { gap: 3px; font-size: 12px; }
 #cloud-auth .cloud-login label { min-width: 150px; gap: 3px; }
 #cloud-auth .cloud-status { margin: 0; font-size: 12px; }
 #cloud-auth:has(.cloud-login:not([hidden])) .cloud-status { flex-basis: 100%; }
+.connection-panels { flex: none; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.connection-panels > .panel { min-width: 0; }
+.connection-panels .storage-panel { align-content: center; }
+.connection-panels #cloud-auth .cloud-login label { min-width: 120px; }
 .storage-panel, .backup-panel { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
 #file-info { margin: 0; font-size: 12px; }
 .storage-panel .hint, .backup-panel .hint { margin-left: auto; }
@@ -97,6 +101,7 @@ td button { padding: 4px 9px; margin: 1px 3px; }
 .file-label input { width: 230px; margin: 0; padding: 0; border: 0; }
 footer.wrap { flex: none; margin: 0 auto; font-size: 11px; padding-bottom: 5px !important; }
 @media (max-width: 900px) {
+  .connection-panels { grid-template-columns: minmax(0, 1fr); }
   body { height: auto; min-height: 100vh; }
   main.wrap { flex: none; }
   .page-heading { flex-wrap: wrap; gap: 10px; }

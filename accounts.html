@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>계좌정보 입력 | Excel Transfer</title>
-  <link rel="stylesheet" href="accounts.css?v=20261110-compact">
+  <link rel="stylesheet" href="accounts.css?v=20261110-connection-row">
   <link rel="stylesheet" href="cloud.css?v=20261110">
   <script type="module" src="accounts.js?v=20261110-cloud"></script>
 </head>
@@ -19,8 +19,10 @@
         <p>로그인이 안 되면 Firebase Authentication의 이메일/비밀번호 활성화와 담당자 UID, Firestore Rules 게시 여부를 확인하세요. JSON은 로그인 없이 사용할 수 있습니다.</p>
       </div></details>
     </div>
+    <div class="connection-panels">
     <section class="panel" id="cloud-auth" aria-label="Firebase 로그인"></section>
     <section class="panel storage-panel"><h2>Firestore 계좌정보</h2><div class="actions"><button id="cloud-save" disabled>Firestore에 저장</button><button id="cloud-reload" class="secondary" disabled>서버에서 다시 불러오기</button></div><p id="file-info"></p><span class="hint">로그인 중 추가·수정·삭제 자동 저장</span></section>
+    </div>
     <p id="message" role="status" aria-live="polite">로그인 전에도 입력 및 JSON 백업을 테스트할 수 있습니다.</p>
     <section class="panel accounts-panel">
       <div class="heading"><h2>계좌 목록 <span id="count">0건</span></h2><span class="hint">열 제목 클릭으로 정렬</span><span id="dirty">변경 사항 없음</span></div>
