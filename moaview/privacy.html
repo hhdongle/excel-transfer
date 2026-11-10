@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="MoaView 개인정보처리방침. 문서의 기기 내 처리, 광고 SDK, 정보 보관·삭제 및 문의 방법을 안내합니다. MoaView Privacy Policy.">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+  <title>MoaView 개인정보처리방침 | Privacy Policy</title>
+  <style>
+    :root { color-scheme: light; --ink:#193c36; --muted:#50665f; --accent:#126b5a; --line:#dbe6e0; --paper:#fff; --wash:#f3f7f4; }
+    * { box-sizing:border-box; }
+    html { scroll-padding-top:1.5rem; }
+    body { margin:0; background:var(--wash); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI","Malgun Gothic",sans-serif; font-size:16px; line-height:1.85; overflow-wrap:anywhere; }
+    a { color:var(--accent); text-underline-offset:.2em; }
+    a:hover { text-decoration-thickness:2px; }
+    a:focus-visible { outline:3px solid #126b5a; outline-offset:4px; border-radius:2px; }
+    .masthead { background:#103e36; color:#eefbf5; }
+    .bar { max-width:1020px; margin:auto; padding:22px 32px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .brand { font-weight:750; font-size:21px; letter-spacing:-.6px; }
+    .bar nav { display:flex; flex-wrap:wrap; gap:20px; }
+    .bar a { color:#e1f7ee; font-size:14px; }
+    .skip { position:absolute; top:-100px; left:16px; padding:10px; background:white; z-index:5; }
+    .skip:focus { top:8px; }
+    main { max-width:940px; margin:40px auto; padding:0 24px; }
+    .document { padding:48px 56px; background:var(--paper); border:1px solid var(--line); border-radius:18px; }
+    .eyebrow { margin:0 0 12px; color:var(--accent); font-size:12px; letter-spacing:.14em; font-weight:750; }
+    h1 { margin:0; font-size:clamp(29px,5vw,42px); line-height:1.3; letter-spacing:-1.2px; }
+    .subtitle { display:block; margin-top:10px; font-size:20px; font-weight:450; color:var(--muted); letter-spacing:0; }
+    .meta { display:flex; gap:8px 28px; flex-wrap:wrap; margin-top:25px; color:var(--muted); font-size:14px; }
+    .summary { background:#f0f8f3; border-left:3px solid #27836a; padding:16px 20px; margin:28px 0 34px; }
+    .summary p { margin:0; }
+    h2 { margin:38px 0 12px; font-size:23px; line-height:1.5; letter-spacing:-.5px; }
+    h3 { margin:28px 0 10px; font-size:18px; line-height:1.6; }
+    p { margin:12px 0; }
+    ul,ol { padding-left:24px; margin:12px 0; }
+    li { margin:8px 0; }
+    code { font-family:ui-monospace,monospace; font-size:.9em; background:#eef4f0; padding:2px 5px; border-radius:4px; }
+    .contact { padding:18px 22px; border:1px solid var(--line); border-radius:10px; margin:20px 0; }
+    .contact p { margin:4px 0; }
+    .language-break { border:0; border-top:2px solid var(--line); margin:54px 0 36px; }
+    .language-title { font-size:28px; margin-top:0; }
+    .footnote { color:var(--muted); font-size:14px; }
+    footer { text-align:center; padding:0 24px 36px; color:var(--muted); font-size:13px; }
+    @media(max-width:600px) { .bar { padding:18px 22px; } main { margin:20px auto; padding:0 12px; } .document { padding:30px 22px; border-radius:12px; } .meta { gap:6px 18px; } h2 { font-size:21px; } }
+    @media print { body { background:white; color:black; } .masthead,.skip,footer { display:none; } main { max-width:none; margin:0; padding:0; } .document { padding:0; border:0; } a { color:inherit; } h2,h3 { break-after:avoid; } .contact { break-inside:avoid; } }
+  </style>
+</head>
+<body>
+<a class="skip" href="#policy">본문으로 이동 / Skip to content</a>
+<header class="masthead">
+  <div class="bar"><span class="brand">MoaView</span><nav aria-label="언어 / Language"><a href="#korean" lang="ko">한국어</a><a href="#english" lang="en">English</a></nav></div>
+</header>
+<main id="policy">
+<article class="document">
+  <p class="eyebrow">MOAVIEW · PRIVACY</p>
+  <h1>개인정보처리방침<span class="subtitle" lang="en">Privacy Policy</span></h1>
+  <div class="meta"><span>시행·최종 수정: <time datetime="2026-11-10">2026-11-10</time></span><span>운영자: Baek Seung Hwan</span></div>
+
+  <section id="korean" lang="ko" aria-label="한국어 개인정보처리방침">
+    <div class="summary"><p>MoaView는 사용자가 선택한 PDF를 기기 안에서 열람하는 앱입니다. 문서와 읽기 기록을 운영자의 서버로 업로드하지 않습니다. 다만 홈 화면 광고를 위한 Google SDK는 아래에 설명한 기술·광고 관련 정보를 처리합니다.</p></div>
+    <h2>1. 적용 범위와 운영자</h2>
+    <p>이 방침은 Baek Seung Hwan이 제공하는 Android 앱 <strong>MoaView</strong>(모아뷰, 스토어 표시명 MoaView - 문서 뷰어, PDF 연결 표시명 MoaView PDF 뷰어, 패키지 <code>com.hdongle.android.moaview</code>)에 적용됩니다. 현재 지원하는 PDF 열람 기능과 홈 배너 광고를 기준으로 설명합니다. 다른 문서 형식이나 데이터 처리 기능을 추가하면 관련 내용을 갱신합니다.</p>
+    <div class="contact"><p><strong>운영자·개인정보 문의 담당자:</strong> Baek Seung Hwan</p><p><strong>이메일:</strong> <a href="mailto:hdongle@gmail.com">hdongle@gmail.com</a></p></div>
+
+    <h2>2. 기기 안에서 처리하는 정보</h2>
+    <ul>
+      <li><strong>문서 내용과 임시 사본:</strong> 사용자가 시스템 파일 선택기 또는 다른 앱에서 전달한 문서를 읽고, 표시를 위해 앱 전용 캐시에 PDF 사본과 임시 페이지 이미지를 만들 수 있습니다. 이 파일은 문서 표시·확대에 사용하며 운영자 서버로 전송하지 않습니다.</li>
+      <li><strong>최근 문서와 읽던 위치:</strong> 문서 이름, 접근 경로(URI), 열람 시각, 페이지, 확대·이동 위치, 동일 문서 확인용 지문을 앱 전용 저장소에 최대 100개 기록합니다. 최근 문서 재열기와 위치 복원에 사용하며 광고 입력값으로 제공하지 않습니다.</li>
+      <li><strong>PDF 비밀번호:</strong> 보호된 PDF를 여는 동안 메모리에서 처리합니다. 비밀번호를 앱의 영구 저장소에 저장하거나 광고 SDK·운영자에게 전송하지 않습니다.</li>
+      <li><strong>파일 접근 권한:</strong> 사용자가 선택하거나 다른 앱에서 전달한 문서의 읽기 권한을 이용합니다. 다시 열기 위해 Android가 허용하는 지속 읽기 권한을 보관할 수 있습니다. 열람 목적으로 원본을 수정하거나 삭제하지 않습니다.</li>
+    </ul>
+    <p>MoaView에는 자체 회원가입·로그인이나 문서 업로드 서버가 없습니다. 클라우드 저장소의 문서를 고르면 해당 저장소 앱이 파일을 내려받는 과정에는 그 서비스의 방침이 적용됩니다. 사용자가 공유를 실행하면 선택한 수신 앱에 원본 문서와 임시 읽기 권한을 전달하며, 이후 처리는 수신 서비스의 방침을 따릅니다.</p>
+
+    <h2>3. Google AdMob 광고와 동의 설정</h2>
+    <p>MoaView는 홈 화면 하단 배너에 Google AdMob(Google Mobile Ads SDK)을 사용합니다. Google의 SDK 안내에 따르면 광고 제공·효과 분석·부정 이용 방지 등을 위해 다음 정보가 자동 수집·공유됩니다. 실제 처리는 기기, 동의 상태, SDK 및 Google 설정에 따라 달라질 수 있습니다.</p>
+    <ul>
+      <li>IP 주소와 이를 바탕으로 추정한 대략적 위치</li>
+      <li>앱·광고 이용과 상호작용 정보</li>
+      <li>성능·오류 등 진단 정보</li>
+      <li>광고 ID, 앱 세트 ID 및 해당되는 기기·계정 관련 식별자</li>
+    </ul>
+    <p>광고 관련 정보는 위 목적을 위해 Google SDK에서 처리됩니다. 앱은 문서 내용·파일명·URI·비밀번호·읽기 기록을 광고 요청에 넣지 않습니다. 문서 열람 화면에는 배너를 표시하지 않습니다.</p>
+    <p>Google UMP(User Messaging Platform)를 사용하여 필요한 경우 동의 절차를 제공합니다. 해당 지역·동의 상태에서 요구되는 경우 앱의 <strong>설정 → 광고 및 개인정보 → 광고 개인정보 설정</strong>에서 선택을 변경할 수 있습니다. 광고 ID 설정은 Android의 Google/광고 관련 설정에서도 관리할 수 있으며, 메뉴 이름은 기기에 따라 다릅니다. 광고 개인 최적화를 제한하더라도 광고 제공에 필요한 기술 정보가 처리될 수 있습니다. 로컬 문서 열람은 광고나 인터넷 연결이 없어도 가능합니다.</p>
+    <p>광고 관련 처리·보관·국외 이전 및 이용자 선택의 세부 내용은 <a href="https://policies.google.com/privacy?hl=ko">Google 개인정보처리방침</a>, <a href="https://policies.google.com/technologies/ads?hl=ko">Google 광고 기술 안내</a>, <a href="https://developers.google.com/admob/android/privacy/play-data-disclosure">Google Mobile Ads SDK 데이터 공개 안내</a>에서 확인할 수 있습니다.</p>
+
+    <h2>4. 보관 기간과 삭제 방법</h2>
+    <ul>
+      <li><strong>최근 기록:</strong> 사용자가 개별 항목을 길게 눌러 삭제하거나 최근 문서의 전체 기록 삭제를 실행할 때까지, 또는 100개 제한에 따라 오래된 항목이 교체될 때까지 기기에 보관합니다. 기록 삭제는 원본 PDF 삭제와 별개입니다.</li>
+      <li><strong>문서 캐시:</strong> 문서 종료·교체·취소, 다음 작업 시작 등의 정리 과정에서 삭제합니다. 비정상 종료로 일부가 남을 수 있으며 앱의 <strong>설정 → 문서 캐시 삭제</strong>로 정리할 수 있습니다.</li>
+      <li><strong>앱 데이터:</strong> Android 설정에서 MoaView의 저장 데이터 삭제 또는 앱 제거를 통해 앱 전용 기록·설정을 지울 수 있습니다. 사용자 저장소의 원본과 외부 서비스가 보관한 자료는 별도로 관리해야 합니다. 앱은 Android 백업을 비활성화하도록 설정되어 있습니다.</li>
+      <li><strong>Google 처리 정보:</strong> Google의 서비스·개인정보 설정 및 보관 정책에 따라 관리됩니다. 로컬 기록이나 캐시 삭제가 Google 측 자료까지 삭제하는 것은 아닙니다. 위 Google 방침에서 데이터 관리·삭제 방법을 확인하세요.</li>
+      <li><strong>문의 이메일:</strong> 문의를 보내면 이메일 주소와 사용자가 제공한 내용을 답변·문제 해결에 사용합니다. 문의 처리가 끝나 더 이상 필요하지 않은 정보는 삭제하며, 법령상 보관 의무가 있으면 해당 범위와 기간을 따릅니다.</li>
+    </ul>
+
+    <h2>5. 공유, 외부 서비스와 보호 조치</h2>
+    <p>운영자는 앱의 문서·읽기 기록을 판매하거나 운영자 서버에 수집하지 않습니다. 사용자의 공유 동작, 위 광고 SDK 처리 및 사용자가 이메일로 제공하는 정보는 앞 절의 범위에서 처리됩니다. Google 등 외부 서비스가 처리하는 정보는 해당 제공자의 글로벌 인프라와 방침에 따라 처리될 수 있습니다.</p>
+    <p>문서 임시 파일과 읽기 기록은 Android의 앱 전용 저장 영역을 사용합니다. Google은 광고 SDK가 수집하는 데이터의 전송에 TLS를 사용한다고 안내합니다. 문의 시 불필요한 민감 문서, 계정 비밀번호 또는 PDF 비밀번호를 보내지 마세요.</p>
+    <p>이 개인정보처리방침 페이지는 GitHub Pages에서 제공합니다. 이 페이지에는 자체 분석 도구, 광고, 로그인 또는 입력 양식이 없습니다. 웹페이지 접속 자체의 네트워크·보안 로그 등은 호스팅 제공자의 <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub 개인정보처리방침</a>을 따릅니다. 같은 사이트의 다른 서비스와 MoaView 앱의 데이터 처리는 별개입니다.</p>
+
+    <h2>6. 이용자 권리와 문의</h2>
+    <p>앱에 저장된 기록과 캐시는 위 방법으로 직접 삭제할 수 있습니다. 운영자가 문의 과정에서 받은 개인정보의 열람·정정·삭제 또는 처리 관련 문의는 <a href="mailto:hdongle@gmail.com">hdongle@gmail.com</a>으로 보내세요. 운영자가 실제로 보유한 정보 범위에서 관련 법령에 따라 확인하고 처리합니다. 기기 안에만 저장된 문서와 기록은 운영자가 원격으로 조회하거나 삭제할 수 없습니다.</p>
+
+    <h2>7. 방침 변경</h2>
+    <p>지원 기능, 광고 SDK 또는 정보 처리 방식이 바뀌면 이 페이지와 시행·수정일을 갱신합니다. 법령에 따라 별도 고지나 동의가 필요한 변경은 해당 절차를 진행합니다.</p>
+  </section>
+
+  <hr class="language-break">
+  <section id="english" lang="en" aria-labelledby="english-title">
+    <p class="eyebrow">ENGLISH</p>
+    <h2 class="language-title" id="english-title">MoaView Privacy Policy</h2>
+    <p class="footnote">Effective and last updated: November 10, 2026 · Operator: Baek Seung Hwan</p>
+    <p>This policy applies to the Android app <strong>MoaView</strong> (MoaView - Document Viewer / MoaView PDF Viewer, package <code>com.hdongle.android.moaview</code>), operated by Baek Seung Hwan. It covers the current PDF viewer and home-screen banner advertising. We will update it when supported features or data practices change.</p>
+
+    <h3>1. Documents and information on your device</h3>
+    <p>MoaView reads documents you select in Android's file picker or receive from another app. It may create temporary PDF copies and rendered images in app-private cache for viewing and zooming. It keeps up to 100 recent-document records containing document names, URIs, opening times, page and viewport positions, and a document fingerprint to restore reading progress. These documents and records are not uploaded to an operator-run server or supplied as advertising request inputs.</p>
+    <p>A PDF password is processed in memory to unlock the document; it is not saved in the app's persistent storage or sent to the operator or advertising SDK. The app uses permission to read selected files and may retain a persistable read grant for reopening. Viewing does not modify or delete your original files.</p>
+    <p>MoaView has no account registration, login, or operator-run document upload service. When you select a cloud-hosted file, its provider may download it under that provider's policy. When you choose to share a document, MoaView passes the original URI and temporary read permission to your chosen recipient app; that service controls subsequent handling.</p>
+
+    <h3>2. Advertising and privacy choices</h3>
+    <p>Google AdMob supplies the home banner. Google's SDK disclosure identifies network addresses (including location inferred from them), usage events, performance or fault reports, and advertising/app/device/account identifiers as data handled for ad delivery, measurement and abuse prevention. Processing varies with configuration and consent. Documents, names, URIs, passwords and reading records are not added to advertising requests. No banner appears on the document-reading screen.</p>
+    <p>Google UMP handles consent where required. When available for your region and consent status, use <strong>Settings → Ads and privacy → Ad privacy choices</strong> to change your selection. Android's Google/ads settings also provide controls for advertising identifiers. Limiting personalization does not necessarily stop all technical processing. Local PDF viewing remains available offline and without ads.</p>
+    <p>See the <a href="https://policies.google.com/privacy?hl=en">Google Privacy Policy</a>, <a href="https://policies.google.com/technologies/ads?hl=en">Google advertising information</a> and <a href="https://developers.google.com/admob/android/privacy/play-data-disclosure">Mobile Ads SDK disclosure</a> for provider details, including storage, international processing and choices.</p>
+
+    <h3>3. Retention and deletion</h3>
+    <ul>
+      <li>Recent records remain on your device until you remove an entry, select Clear all history, or older entries are replaced under the 100-record limit. Removing a record does not remove the original file.</li>
+      <li>Temporary document files are cleaned up as documents close, change or are cancelled, and at subsequent work. A crash may leave files behind; use <strong>Settings → Clear document cache</strong> to remove them.</li>
+      <li>Android's app-storage controls or uninstalling the app remove app-private data. Original files in shared storage and data retained by other services are managed separately. Android backup is disabled for the app.</li>
+      <li>Google-retained data follows Google's retention policies and account/privacy controls. Clearing MoaView's local cache or history does not delete records held by Google.</li>
+      <li>If you email us, we use your address and the information you voluntarily provide to respond and resolve the issue. We delete information no longer needed after the inquiry is resolved, except where applicable law requires retention.</li>
+    </ul>
+
+    <h3>4. Sharing, security and this webpage</h3>
+    <p>The operator does not sell documents or reading records or collect them on an operator-run server. User-directed sharing, advertising processing and support email are described above. External providers may process information using their global infrastructure under their own policies.</p>
+    <p>Local records and temporary files use Android's app-private storage. Google documents transport encryption for its ads SDK. Do not send unnecessary sensitive documents, account credentials or PDF passwords when requesting support.</p>
+    <p>This page is hosted on GitHub Pages without our own analytics, ads, sign-in or input forms. Hosting-related network/security records are governed by the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub Privacy Statement</a>. Other services hosted on this domain have separate data practices from the MoaView app.</p>
+
+    <h3>5. Your choices, contact and policy changes</h3>
+    <p>You can delete local records and cache using the controls above. For questions or requests to access, correct or delete personal information you provided to the operator, contact <strong>Baek Seung Hwan</strong> at <a href="mailto:hdongle@gmail.com">hdongle@gmail.com</a>. We address requests within the information we actually hold and applicable law. We cannot remotely inspect or erase documents and records stored only on your device.</p>
+    <p>We update this page and its dates when features or data practices change, and provide any additional notice or consent required by applicable law.</p>
+  </section>
+  <p class="footnote"><a href="#policy">맨 위로 / Back to top</a></p>
+</article>
+</main>
+<footer>MoaView · Baek Seung Hwan · <a href="mailto:hdongle@gmail.com">hdongle@gmail.com</a></footer>
+</body>
+</html>

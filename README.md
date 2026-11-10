@@ -52,3 +52,9 @@ Firestore 콘솔의 Rules에 `firestore.rules` 전체를 게시할 수 있습니
 - `firebase emulators:start --project demo-excel-transfer --only auth,firestore` 후 정적 서버에서 `http://127.0.0.1:8770/accounts.html?emulators=1`로 브라우저 QA할 수 있습니다. 에뮬레이터 전환은 localhost/127.0.0.1에서만 허용합니다. 배포 도메인의 쿼리 문자열로는 데모 모드가 켜지지 않습니다.
 
 Firestore SDK는 공식 gstatic CDN의 12.6.0 고정 버전을 사용합니다. npm 의존성은 테스트 전용이며 GitHub Pages 실행에 npm 서버가 필요하지 않습니다.
+
+## MoaView 개인정보처리방침
+
+- 페이지 소스: [`moaview/privacy.html`](moaview/privacy.html) — 한국어/영어, 로그인 없이 열람 가능한 독립 정적 페이지. 기존 Firebase 화면과 연동하지 않습니다.
+- 공개 주소: https://hhdongle.github.io/excel-transfer/moaview/privacy.html
+- 운영자: Baek Seung Hwan / 문의: hdongle@gmail.com. 앱의 정보 처리 방식·광고 SDK·연락처가 바뀌면 방침과 시행/수정일을 함께 갱신합니다.
