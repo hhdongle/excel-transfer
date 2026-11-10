@@ -4,21 +4,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>계좌정보 입력 | Excel Transfer</title>
-  <link rel="stylesheet" href="accounts.css?v=20261109-sort">
+  <link rel="stylesheet" href="accounts.css?v=20261110-compact">
   <link rel="stylesheet" href="cloud.css?v=20261110">
   <script type="module" src="accounts.js?v=20261110-cloud"></script>
 </head>
 <body>
   <header><div class="wrap"><a href="index.html">EXCEL TRANSFER</a><span>교회 재정 업무</span></div></header>
   <main class="wrap">
-    <a href="index.html" class="back">← 전체 메뉴</a>
-    <h1>계좌정보 입력</h1>
-    <p class="intro">은행과 계좌정보를 관리하고 Firestore에 저장하세요.</p>
+    <div class="page-heading"><a href="index.html" class="back">← 전체 메뉴</a><h1>계좌정보 입력</h1>
+      <details class="help"><summary>사용 방법 · 로그인 도움말</summary><div class="help-content">
+        <p>로그인하면 계좌정보를 자동으로 불러오고, 추가·수정·삭제를 서버에 저장합니다. 저장 실패 시 목록은 유지되므로 JSON으로 백업하고 다시 저장하세요.</p>
+        <p>열 제목을 누르면 오름차순·내림차순으로 정렬됩니다. 순번은 원래 목록 순서이며, 화면 정렬은 JSON 저장 순서를 바꾸지 않습니다.</p>
+        <p>기존 JSON은 불러온 뒤 내용을 확인하고 Firestore에 저장하세요. 불러오기는 현재 목록을 교체합니다. JSON 항목은 bank, accountNumber, name, notes 문자열을 사용합니다.</p>
+        <p>로그인이 안 되면 Firebase Authentication의 이메일/비밀번호 활성화와 담당자 UID, Firestore Rules 게시 여부를 확인하세요. JSON은 로그인 없이 사용할 수 있습니다.</p>
+      </div></details>
+    </div>
     <section class="panel" id="cloud-auth" aria-label="Firebase 로그인"></section>
-    <section class="panel"><h2>Firestore 계좌정보</h2><div class="actions"><button id="cloud-save" disabled>Firestore에 저장</button><button id="cloud-reload" class="secondary" disabled>서버에서 다시 불러오기</button></div><p id="file-info"></p><p class="hint">로그인하면 계좌정보를 자동으로 불러오고, 추가·수정·삭제를 서버에 저장합니다. 기존 JSON은 불러온 뒤 내용을 확인하고 저장하세요.</p></section>
+    <section class="panel storage-panel"><h2>Firestore 계좌정보</h2><div class="actions"><button id="cloud-save" disabled>Firestore에 저장</button><button id="cloud-reload" class="secondary" disabled>서버에서 다시 불러오기</button></div><p id="file-info"></p><span class="hint">로그인 중 추가·수정·삭제 자동 저장</span></section>
     <p id="message" role="status" aria-live="polite">로그인 전에도 입력 및 JSON 백업을 테스트할 수 있습니다.</p>
-    <div class="heading"><h2>계좌 목록 <span id="count">0건</span></h2><span id="dirty">변경 사항 없음</span></div>
-    <section class="panel">
+    <section class="panel accounts-panel">
+      <div class="heading"><h2>계좌 목록 <span id="count">0건</span></h2><span class="hint">열 제목 클릭으로 정렬</span><span id="dirty">변경 사항 없음</span></div>
       <form id="account-form">
         <div class="fields">
           <label>은행 <input id="bank" required maxlength="100" autocomplete="off" placeholder="예: 국민은행"></label>
@@ -28,8 +33,6 @@
         </div>
         <div class="actions"><button id="submit" type="submit">목록에 추가</button><button type="button" id="cancel" class="secondary" hidden>수정 취소</button></div>
       </form>
-      <p class="hint">로그인 중에는 추가·수정·삭제가 자동 저장됩니다. 저장 실패 시 화면의 목록은 유지되므로 JSON으로 백업하고 다시 저장하세요.</p>
-      <p class="hint">열 제목을 누르면 오름차순·내림차순으로 정렬됩니다. 순번은 원래 목록 순서이며, 화면 정렬은 JSON 저장 순서를 바꾸지 않습니다.</p>
       <div class="table-scroll"><table><caption class="sr-only">저장할 계좌정보 목록</caption><thead><tr>
         <th scope="col" aria-sort="ascending"><button type="button" class="sort-button" data-sort="order" data-label="순번">순번 <span class="sort-indicator" aria-hidden="true">▲</span></button></th>
         <th scope="col" aria-sort="none"><button type="button" class="sort-button" data-sort="bank" data-label="은행">은행 <span class="sort-indicator" aria-hidden="true">↕</span></button></th>
@@ -40,13 +43,11 @@
       </tr></thead><tbody id="rows"></tbody></table></div>
       <p id="empty">등록된 계좌가 없습니다. 위에서 계좌정보를 추가하세요.</p>
     </section>
-    <section class="panel" aria-labelledby="backup-heading">
+    <section class="panel backup-panel" aria-labelledby="backup-heading">
       <h2 id="backup-heading">JSON 백업과 복원</h2>
-      <p>현재 목록을 PC에 백업하거나, 기존 JSON을 불러온 뒤 Firestore에 저장할 수 있습니다.</p>
       <div class="actions"><button id="export" class="secondary">JSON 다운로드</button><label class="file-label">JSON 불러오기<input id="import" type="file" accept=".json,application/json"></label></div>
-      <p class="hint">불러오기는 현재 목록을 교체합니다. JSON 항목은 bank, accountNumber, name, notes 문자열을 사용합니다.</p>
+      <span class="hint">PC 백업 · JSON 불러오기 후 내용 확인 및 서버 저장</span>
     </section>
-    <details class="panel"><summary>로그인이 안 될 때</summary><p>Firebase Authentication의 이메일/비밀번호 활성화와 담당자 UID, Firestore Rules 게시 여부를 확인하세요. 연결이 안 되어도 JSON을 불러오거나 백업할 수 있습니다.</p></details>
   </main>
   <footer class="wrap">계좌정보는 로그인한 담당자의 Firestore에 저장됩니다. 이 사이트의 공개 저장소에는 업로드되지 않습니다.</footer>
 </body>

@@ -49,3 +49,64 @@ footer { padding-bottom: 32px !important; line-height: 1.8; }
 [hidden] { display: none !important; }
 @media (max-width: 760px) { .fields { grid-template-columns: 1fr 1fr; } .wrap { padding-left: 18px; padding-right: 18px; } .panel { padding: 20px; } header span { display: none; } }
 @media (max-width: 440px) { .fields { grid-template-columns: 1fr; } }
+
+/* Keep the controls on screen; only the account list scrolls on desktop. */
+body { height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
+.wrap { width: 100%; max-width: 1920px; padding-left: 14px; padding-right: 14px; }
+header { flex: none; }
+header .wrap { padding-top: 10px; padding-bottom: 10px; }
+main.wrap { flex: 1; min-height: 0; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; padding-top: 10px !important; padding-bottom: 8px !important; }
+.page-heading { display: flex; flex: none; align-items: center; gap: 18px; }
+.back { font-size: 12px; white-space: nowrap; }
+h1 { font-size: 22px; margin: 0; }
+h2 { font-size: 15px; }
+.panel { flex: none; margin: 0; padding: 9px 12px; border-radius: 9px; }
+.heading { margin: 0; gap: 10px; }
+.actions { margin: 0; gap: 8px; }
+button, .file-label { padding: 7px 11px; font-size: 12px; border-radius: 6px; }
+input, select { padding: 7px 9px; font-size: 13px; }
+label { gap: 3px; font-size: 12px; }
+.hint { font-size: 12px; }
+.help { position: relative; margin-left: auto; font-size: 12px; }
+.help summary { padding: 5px; color: #285d45; }
+.help-content { position: absolute; right: 0; top: 100%; z-index: 10; width: min(680px, calc(100vw - 28px)); max-height: 60vh; overflow: auto; background: white; padding: 8px 16px; border: 1px solid #c8d6cc; border-radius: 8px; box-shadow: 0 8px 24px #19352e22; }
+#cloud-auth { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; }
+#cloud-auth > p:not(.cloud-status) { display: none; }
+#cloud-auth .cloud-login { flex: 1; gap: 8px; }
+#cloud-auth .cloud-login label { min-width: 150px; gap: 3px; }
+#cloud-auth .cloud-status { margin: 0; font-size: 12px; }
+#cloud-auth:has(.cloud-login:not([hidden])) .cloud-status { flex-basis: 100%; }
+.storage-panel, .backup-panel { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
+#file-info { margin: 0; font-size: 12px; }
+.storage-panel .hint, .backup-panel .hint { margin-left: auto; }
+#message { flex: none; margin: 0; padding: 5px 12px; font-size: 12px; line-height: 1.5; }
+.accounts-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+#account-form { flex: none; display: flex; align-items: end; gap: 12px; }
+.fields { flex: 1; gap: 12px; }
+#account-form .actions { flex: none; }
+.table-scroll { flex: 1; min-height: 0; margin: 0; overflow: auto; overscroll-behavior: contain; }
+table { min-width: 780px; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+th, td { padding: 5px 9px; }
+th { position: sticky; top: 0; z-index: 1; border-bottom: 1px solid #ccd9ce; }
+th:first-child { width: 70px; }
+th:nth-child(3), td:nth-child(3) { white-space: nowrap; }
+th:last-child { width: 145px; }
+td button { padding: 4px 9px; margin: 1px 3px; }
+#empty { margin: 0; padding: 8px; }
+.file-label { display: inline-flex; align-items: center; gap: 8px; }
+.file-label input { width: 230px; margin: 0; padding: 0; border: 0; }
+footer.wrap { flex: none; margin: 0 auto; font-size: 11px; padding-bottom: 5px !important; }
+@media (max-width: 900px) {
+  body { height: auto; min-height: 100vh; }
+  main.wrap { flex: none; }
+  .page-heading { flex-wrap: wrap; gap: 10px; }
+  #account-form { align-items: stretch; flex-direction: column; }
+  .fields { grid-template-columns: 1fr 1fr; }
+  .table-scroll { flex: none; max-height: 55vh; }
+  .storage-panel .hint, .backup-panel .hint { margin-left: 0; }
+}
+@media (max-width: 440px) {
+  .fields { grid-template-columns: 1fr; }
+  .file-label { flex-wrap: wrap; }
+  .file-label input { width: 200px; }
+}
