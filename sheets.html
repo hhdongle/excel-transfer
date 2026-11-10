@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>두 시트 작업 | Excel Transfer</title>
-  <link rel="stylesheet" href="sheets.css?v=20261110">
-  <script type="module" src="sheets.js?v=20261110"></script>
+  <link rel="stylesheet" href="sheets.css?v=20261110-undo">
+  <script type="module" src="sheets.js?v=20261110-undo"></script>
 </head>
 <body>
   <header><a href="index.html">EXCEL TRANSFER</a><span>교회 재정 업무</span></header>
@@ -14,17 +14,17 @@
     <h1>두 시트 작업</h1>
     <p class="intro">엑셀에서 복사한 표를 붙여 넣고, 좌우 시트 사이에서 필요한 셀을 옮겨 보세요.</p>
     <div class="instructions"><strong>붙여넣기</strong> 시작 셀 클릭 → Ctrl+V <span>·</span> <strong>범위 선택</strong> 드래그 또는 Shift+방향키 <span>·</span> <strong>복사</strong> Ctrl+C → 엑셀에서 Ctrl+V <span>·</span> <strong>편집</strong> 더블클릭 또는 F2</div>
-    <p class="notice">텍스트와 숫자 값을 다룹니다. 수식 계산·셀 서식은 지원하지 않으며, 새로고침하거나 페이지를 떠나면 내용이 초기화됩니다. 필요한 자료는 엑셀에 복사해 보관하세요.</p>
+    <p class="notice">Ctrl+Z로 실행 취소 · Ctrl+Y 또는 Ctrl+Shift+Z로 다시 실행 (시트별 최근 100회). 텍스트와 숫자 값을 다루며 수식 계산·셀 서식은 지원하지 않습니다. 새로고침하거나 페이지를 떠나면 내용과 작업 이력이 초기화됩니다. 필요한 자료는 엑셀에 복사해 보관하세요.</p>
     <div class="sheets">
       <section class="sheet" data-sheet="left" aria-labelledby="left-title">
         <div class="sheet-heading"><h2 id="left-title">왼쪽 시트</h2><span class="selection-info" aria-live="polite"></span></div>
-        <div class="toolbar"><button data-action="copy">선택 영역 복사</button><button data-action="paste">붙여넣기</button><button data-action="clear" class="secondary">선택 내용 지우기</button><button data-action="rows" class="secondary">행 +50</button><button data-action="cols" class="secondary">열 +5</button></div>
+        <div class="toolbar"><button data-action="copy">선택 영역 복사</button><button data-action="paste">붙여넣기</button><button data-action="undo" class="secondary" disabled>실행 취소</button><button data-action="redo" class="secondary" disabled>다시 실행</button><button data-action="clear" class="secondary">선택 내용 지우기</button><button data-action="rows" class="secondary">행 +50</button><button data-action="cols" class="secondary">열 +5</button></div>
         <div class="grid-scroll" tabindex="0" role="region" aria-label="왼쪽 시트 셀 작업 영역"></div>
         <p class="sheet-status" role="status">시작 셀을 선택하고 엑셀 데이터를 붙여 넣으세요.</p>
       </section>
       <section class="sheet" data-sheet="right" aria-labelledby="right-title">
         <div class="sheet-heading"><h2 id="right-title">오른쪽 시트</h2><span class="selection-info" aria-live="polite"></span></div>
-        <div class="toolbar"><button data-action="copy">선택 영역 복사</button><button data-action="paste">붙여넣기</button><button data-action="clear" class="secondary">선택 내용 지우기</button><button data-action="rows" class="secondary">행 +50</button><button data-action="cols" class="secondary">열 +5</button></div>
+        <div class="toolbar"><button data-action="copy">선택 영역 복사</button><button data-action="paste">붙여넣기</button><button data-action="undo" class="secondary" disabled>실행 취소</button><button data-action="redo" class="secondary" disabled>다시 실행</button><button data-action="clear" class="secondary">선택 내용 지우기</button><button data-action="rows" class="secondary">행 +50</button><button data-action="cols" class="secondary">열 +5</button></div>
         <div class="grid-scroll" tabindex="0" role="region" aria-label="오른쪽 시트 셀 작업 영역"></div>
         <p class="sheet-status" role="status">시작 셀을 선택하고 엑셀 데이터를 붙여 넣으세요.</p>
       </section>

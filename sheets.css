@@ -20,6 +20,7 @@ h2 { margin: 0; font-size: 18px; }
 button { border: 1px solid #285e49; border-radius: 6px; background: #285e49; color: white; padding: 8px 10px; font: inherit; font-size: 12px; cursor: pointer; }
 button.secondary { border-color: #cedbd1; color: #285e49; background: white; }
 button:hover { filter: brightness(.94); }
+button:disabled { opacity: .4; cursor: default; }
 button:focus-visible { outline: 3px solid #94b8ec; outline-offset: 2px; }
 .grid-scroll { height: min(65vh,740px); min-height: 320px; overflow: auto; outline: none; border-top: 1px solid #dce5dd; position: relative; overscroll-behavior: contain; }
 .grid-scroll:focus-visible { box-shadow: inset 0 0 0 2px #4285e0; }
