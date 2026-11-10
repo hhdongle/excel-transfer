@@ -1,0 +1,37 @@
+:root { font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif; color: #19352e; background: #f5f7f4; color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+header { display: flex; justify-content: space-between; padding: 20px 28px; border-bottom: 1px solid #dfe7df; background: white; }
+a { color: #285e49; text-underline-offset: 4px; }
+header a { font-weight: bold; text-decoration: none; }
+header span { color: #647269; font-size: 13px; }
+main { max-width: 1920px; margin: auto; padding: 26px 24px; }
+h1 { font-size: 30px; margin: 22px 0 12px; letter-spacing: -.04em; }
+.intro, .notice { color: #647269; line-height: 1.7; }
+.instructions { background: #eaf2ec; border-radius: 8px; padding: 14px 16px; font-size: 13px; line-height: 1.9; }
+.instructions span { padding: 0 8px; color: #7c8b81; }
+.notice { font-size: 12px; }
+.sheets { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 18px; }
+.sheet { min-width: 0; background: white; border: 1px solid #dce5dd; border-radius: 12px; overflow: hidden; }
+.sheet-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px; }
+h2 { margin: 0; font-size: 18px; }
+.selection-info { font-size: 12px; color: #285e49; font-variant-numeric: tabular-nums; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 7px; padding: 0 16px 14px; }
+button { border: 1px solid #285e49; border-radius: 6px; background: #285e49; color: white; padding: 8px 10px; font: inherit; font-size: 12px; cursor: pointer; }
+button.secondary { border-color: #cedbd1; color: #285e49; background: white; }
+button:hover { filter: brightness(.94); }
+button:focus-visible { outline: 3px solid #94b8ec; outline-offset: 2px; }
+.grid-scroll { height: min(65vh,740px); min-height: 320px; overflow: auto; outline: none; border-top: 1px solid #dce5dd; position: relative; overscroll-behavior: contain; }
+.grid-scroll:focus-visible { box-shadow: inset 0 0 0 2px #4285e0; }
+table { table-layout: fixed; border-collapse: separate; border-spacing: 0; font-size: 13px; color: #263c33; }
+th, td { min-width: 116px; width: 116px; height: 28px; max-height: 28px; padding: 3px 7px; border-right: 1px solid #e1e6e2; border-bottom: 1px solid #e1e6e2; }
+thead th { position: sticky; top: 0; z-index: 3; background: #eff3ef; text-align: center; font-weight: normal; color: #66776c; }
+tbody th, thead th:first-child { position: sticky; left: 0; min-width: 42px; width: 42px; background: #eff3ef; text-align: center; font-weight: normal; color: #66776c; z-index: 2; }
+thead th:first-child { z-index: 4; }
+td { position: relative; white-space: pre; overflow: hidden; text-overflow: clip; cursor: cell; user-select: none; }
+td.selected { background: #e8f0fe; }
+td.active { box-shadow: inset 0 0 0 2px #3879d8; }
+.cell-text { display: block; max-height: 20px; overflow: hidden; }
+.cell-editor { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; padding: 3px 6px; border: 2px solid #3879d8; outline: none; font: inherit; background: white; color: inherit; resize: none; }
+.sheet-status { min-height: 20px; margin: 10px 16px; font-size: 12px; color: #647269; }
+@media (max-width: 850px) { .sheets { grid-template-columns: minmax(0,1fr); } main { padding: 20px 12px; } .grid-scroll { height: 440px; } }

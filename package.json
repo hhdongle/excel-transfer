@@ -2,7 +2,7 @@
   "name": "excel-transfer",
   "private": true,
   "scripts": {
-    "test": "node --test tests/account-data.test.mjs tests/accounts-sort.test.mjs tests/transfer.test.mjs tests/cloud-data.test.mjs",
+    "test": "node --test tests/account-data.test.mjs tests/accounts-sort.test.mjs tests/transfer.test.mjs tests/cloud-data.test.mjs tests/sheet-data.test.mjs",
     "test:cloud": "firebase emulators:exec --project demo-excel-transfer --only auth,firestore \"node --test tests/firestore.integration.test.mjs\""
   },
   "devDependencies": {
