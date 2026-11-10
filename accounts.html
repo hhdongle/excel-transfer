@@ -5,25 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>계좌정보 입력 | Excel Transfer</title>
   <link rel="stylesheet" href="accounts.css?v=20261109-sort">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script type="module" src="accounts.js?v=20261109-sort"></script>
+  <link rel="stylesheet" href="cloud.css?v=20261110">
+  <script type="module" src="accounts.js?v=20261110-cloud"></script>
 </head>
 <body>
   <header><div class="wrap"><a href="index.html">EXCEL TRANSFER</a><span>교회 재정 업무</span></div></header>
   <main class="wrap">
     <a href="index.html" class="back">← 전체 메뉴</a>
     <h1>계좌정보 입력</h1>
-    <p class="intro">은행과 계좌정보를 관리하고 Google Drive에 JSON 파일로 저장하세요.</p>
-    <section class="panel" aria-labelledby="drive-heading">
-      <div class="heading"><h2 id="drive-heading">Google Drive 연결</h2><span id="connection">연결 안 됨</span></div>
-      <p>처음에는 연결 후 ‘새 JSON 만들기’를 누르세요. 파일은 내 드라이브에 비공개로 생성됩니다.</p>
-      <div class="actions"><button id="connect">Google Drive 연결</button><button id="disconnect" class="secondary" disabled>연결 해제</button></div>
-      <div class="file-row"><label for="files">연결 가능한 JSON 파일</label><select id="files" disabled><option value="">파일을 선택하세요</option></select><button id="refresh" class="secondary" data-auth disabled>목록 새로고침</button><button id="load" class="secondary" data-auth disabled>불러오기</button></div>
-      <div class="actions"><button id="create" class="secondary" data-auth disabled>새 JSON 만들기</button><button id="save" data-auth disabled>Drive에 저장</button></div>
-      <p id="file-info">현재 연결된 파일이 없습니다.</p>
-      <p class="hint">새 파일 이름은 계좌정보.json입니다. 생성 후 Drive에서 원하는 폴더로 옮겨도 계속 연결됩니다. 목록에는 이 앱이 만들거나 접근 권한을 받은 파일만 나옵니다.</p>
-    </section>
-    <p id="message" role="status" aria-live="polite">Google 연결 전에도 입력 및 JSON 백업을 테스트할 수 있습니다.</p>
+    <p class="intro">은행과 계좌정보를 관리하고 Firestore에 저장하세요.</p>
+    <section class="panel" id="cloud-auth" aria-label="Firebase 로그인"></section>
+    <section class="panel"><h2>Firestore 계좌정보</h2><div class="actions"><button id="cloud-save" disabled>Firestore에 저장</button><button id="cloud-reload" class="secondary" disabled>서버에서 다시 불러오기</button></div><p id="file-info"></p><p class="hint">로그인하면 계좌정보를 자동으로 불러오고, 추가·수정·삭제를 서버에 저장합니다. 기존 JSON은 불러온 뒤 내용을 확인하고 저장하세요.</p></section>
+    <p id="message" role="status" aria-live="polite">로그인 전에도 입력 및 JSON 백업을 테스트할 수 있습니다.</p>
     <div class="heading"><h2>계좌 목록 <span id="count">0건</span></h2><span id="dirty">변경 사항 없음</span></div>
     <section class="panel">
       <form id="account-form">
@@ -35,7 +28,7 @@
         </div>
         <div class="actions"><button id="submit" type="submit">목록에 추가</button><button type="button" id="cancel" class="secondary" hidden>수정 취소</button></div>
       </form>
-      <p class="hint">목록 변경 후 ‘Drive에 저장’을 눌러야 서버에 반영됩니다. 저장 전 페이지를 닫으면 변경 내용이 사라집니다.</p>
+      <p class="hint">로그인 중에는 추가·수정·삭제가 자동 저장됩니다. 저장 실패 시 화면의 목록은 유지되므로 JSON으로 백업하고 다시 저장하세요.</p>
       <p class="hint">열 제목을 누르면 오름차순·내림차순으로 정렬됩니다. 순번은 원래 목록 순서이며, 화면 정렬은 JSON 저장 순서를 바꾸지 않습니다.</p>
       <div class="table-scroll"><table><caption class="sr-only">저장할 계좌정보 목록</caption><thead><tr>
         <th scope="col" aria-sort="ascending"><button type="button" class="sort-button" data-sort="order" data-label="순번">순번 <span class="sort-indicator" aria-hidden="true">▲</span></button></th>
@@ -49,12 +42,12 @@
     </section>
     <section class="panel" aria-labelledby="backup-heading">
       <h2 id="backup-heading">JSON 백업과 복원</h2>
-      <p>현재 목록을 PC에 백업하거나, 기존 JSON을 불러온 뒤 새 Drive 파일로 저장할 수 있습니다.</p>
+      <p>현재 목록을 PC에 백업하거나, 기존 JSON을 불러온 뒤 Firestore에 저장할 수 있습니다.</p>
       <div class="actions"><button id="export" class="secondary">JSON 다운로드</button><label class="file-label">JSON 불러오기<input id="import" type="file" accept=".json,application/json"></label></div>
       <p class="hint">불러오기는 현재 목록을 교체합니다. JSON 항목은 bank, accountNumber, name, notes 문자열을 사용합니다.</p>
     </section>
-    <details class="panel"><summary>연결이 안 될 때</summary><p>Google Cloud에서 Drive API가 활성화되어 있는지, 테스트 사용자에 로그인할 이메일이 등록되어 있는지 확인하세요.</p><p>OAuth 클라이언트의 승인된 JavaScript 원본은 https://hhdongle.github.io 입니다. 인증이 만료되면 다시 연결하세요.</p></details>
+    <details class="panel"><summary>로그인이 안 될 때</summary><p>Firebase Authentication의 이메일/비밀번호 활성화와 담당자 UID, Firestore Rules 게시 여부를 확인하세요. 연결이 안 되어도 JSON을 불러오거나 백업할 수 있습니다.</p></details>
   </main>
-  <footer class="wrap">계좌정보는 Google 로그인으로 승인한 Drive 파일에 저장됩니다. 이 사이트의 공개 저장소에는 업로드되지 않습니다.</footer>
+  <footer class="wrap">계좌정보는 로그인한 담당자의 Firestore에 저장됩니다. 이 사이트의 공개 저장소에는 업로드되지 않습니다.</footer>
 </body>
 </html>

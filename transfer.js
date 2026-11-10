@@ -1,9 +1,11 @@
 import { parseAccounts } from './account-data.js';
 import { findAccounts, createTransferWorkbook, parseAmount, parseTransferRows, serializeTransferRows } from './transfer-data.js?v=20261109-export-feedback';
 
-const CLIENT_ID = '166586757984-g0dchsm57vsd77v3kp9f2r1udi8doc4n.apps.googleusercontent.com';
+import { mountCloudAuth, cloudError } from './cloud-client.js';
+import { nextSunday, validateSunday } from './cloud-data.js';
 const $ = id => document.getElementById(id);
-let source = [], rows = [], token = '', expires = 0, busy = false, dirty = false;
+let source = [], rows = [], busy = false, dirty = false;
+let cloudUser = null, generation = 0, loadedWeek = null;
 let toastTimer;
 
 function showToast(text) {
@@ -34,19 +36,17 @@ function exportFailure(error) {
 }
 
 function controls() {
-  const connected = Boolean(token && Date.now() < expires);
-  $('connect').disabled = busy;
-  $('disconnect').disabled = busy || !token;
-  $('refresh').disabled = busy || !connected;
-  $('drive-files').disabled = busy || !connected;
-  $('load-drive').disabled = busy || !connected || !$('drive-files').value;
+  for (const id of ['cloud-source', 'week-save', 'week-refresh', 'week-list']) $(id).disabled = busy || !cloudUser;
+  $('week-load').disabled = busy || !cloudUser || !$('week-list').value;
+  $('week-date').disabled = busy;
+  $('week-new').disabled = busy;
   $('source-file').disabled = busy;
   $('import-json').disabled = busy;
   $('query').disabled = busy || !source.length;
   $('search').disabled = busy || !source.length;
   for (const id of ['export-json', 'export-excel', 'clear']) $(id).disabled = busy || !rows.length;
   $('grid-rows').querySelectorAll('button, input').forEach(control => control.disabled = busy);
-  $('connection').textContent = connected ? 'Drive 연결됨' : '연결 안 됨';
+
 }
 
 function cells(tr, row) {
@@ -117,6 +117,7 @@ function renderTotal() {
     catch { pending++; }
   }
   $('amount-total').textContent = `합계 ${total.toLocaleString('ko-KR')}원${pending ? ` · 금액 확인 필요 ${pending}건` : ''}`;
+  if (dirty) $('week-status').textContent = '현재 작업에 변경 내용이 있습니다. 날짜를 확인하고 주일별 저장을 누르세요.';
 }
 
 function add(row) {
@@ -139,7 +140,7 @@ async function run(action, onError = error => message(error.message || '처리�
   busy = true; controls();
   let failure;
   try { await action(); }
-  catch (error) { failure = error; }
+  catch (error) { failure = new Error(cloudError(error)); failure.rowIndex = error.rowIndex; }
   finally { busy = false; controls(); }
   if (failure) onError(failure);
 }
@@ -149,60 +150,74 @@ async function readLocal(file, parser = parseAccounts) {
   return parser(await file.text());
 }
 
-async function drive(path) {
-  if (!token || Date.now() >= expires) { token = ''; throw new Error('Google 인증이 만료되었습니다. Drive에 다시 연결하세요. 현재 작업 목록은 유지됩니다.'); }
-  const response = await fetch(`https://www.googleapis.com/drive/v3/${path}`, { headers: { Authorization: `Bearer ${token}` } });
-  if (!response.ok) {
-    if (response.status === 401) token = '';
-    const detail = await response.json().catch(() => ({}));
-    throw new Error(`Drive 불러오기 실패 (${response.status}): ${detail.error?.message || '권한과 네트워크를 확인하세요.'}`);
+const session = mountCloudAuth($('cloud-auth'), {
+  canLeave: () => !busy && (!dirty || ask('저장하지 않은 작업 목록이 있습니다. JSON 백업 또는 주일별 저장을 완료했나요? 로그아웃하면 화면 자료가 지워집니다.')),
+  onUser: async user => {
+    const previous = cloudUser, ticket = ++generation;
+    cloudUser = user; loadedWeek = null;
+    $('week-list').replaceChildren(new Option('저장된 주일 선택', ''));
+    if (!user) {
+      if (previous) { source = []; rows = []; dirty = false; setSource([], '로그아웃'); renderGrid(); }
+      controls(); return;
+    }
+    await run(async () => {
+      const {store} = await session.getCloud();
+      const accounts = await store.readAccounts(user.uid);
+      if (ticket !== generation) return;
+      setSource(accounts.rows, 'Firestore 계좌정보');
+      await refreshWeeks();
+      message(accounts.exists ? `Firestore 계좌정보 ${source.length}건을 자동으로 불러왔습니다.` : '서버에 계좌정보가 없습니다. 계좌정보 입력 페이지에서 기존 JSON을 이전하세요.');
+    });
   }
-  return response;
+});
+async function refreshWeeks() {
+  const ticket = generation, {store} = await session.getCloud();
+  const records = await store.listWeeks(cloudUser.uid);
+  if (ticket !== generation) return;
+  $('week-list').replaceChildren(new Option('저장된 주일 선택', ''));
+  records.forEach(item => $('week-list').add(new Option(`${item.date} · ${item.count}건`, item.date)));
+  if (loadedWeek && records.some(item => item.date === loadedWeek.date)) $('week-list').value = loadedWeek.date;
 }
-
-async function listDriveFiles() {
-  let next = '', files = [];
-  const selected = $('drive-files').value;
-  do {
-    const params = new URLSearchParams({ q: "trashed = false and (mimeType = 'application/json' or name contains '.json')", fields: 'nextPageToken,files(id,name)', pageSize: '100', orderBy: 'modifiedTime desc' });
-    if (next) params.set('pageToken', next);
-    const data = await (await drive(`files?${params}`)).json(); files.push(...data.files); next = data.nextPageToken;
-  } while (next);
-  $('drive-files').replaceChildren(new Option('파일 선택', ''));
-  files.forEach(file => $('drive-files').add(new Option(`${file.name} · ${file.id.slice(-6)}`, file.id)));
-  if (files.some(file => file.id === selected)) $('drive-files').value = selected;
-  message(files.length ? '계좌 원본 JSON을 선택하고 원본 불러오기를 누르세요.' : '연결 가능한 JSON이 없습니다. 계좌정보 입력 페이지에서 생성하거나 PC의 JSON을 불러오세요.');
+function weekFailure(error) {
+  $('week-status').textContent = `저장·조회 실패: ${error.message}`;
+  message(error.message, true);
 }
-
-$('connect').onclick = () => {
-  if (!window.google?.accounts?.oauth2) { message('Google 로그인 모듈을 불러오는 중입니다. 잠시 후 다시 누르세요.', true); return; }
-  google.accounts.oauth2.initTokenClient({
-    client_id: CLIENT_ID, scope: 'https://www.googleapis.com/auth/drive.file',
-    callback: response => {
-      if (response.error) { message(`Google 연결 실패: ${response.error_description || response.error}`, true); return; }
-      token = response.access_token; expires = Date.now() + Number(response.expires_in) * 1000 - 30000;
-      $('drive-files').replaceChildren(new Option('파일 선택', ''));
-      run(listDriveFiles);
-    },
-    error_callback: error => message(`로그인 창이 닫혔거나 열리지 않았습니다 (${error.type}). 팝업을 허용하고 다시 연결하세요.`, true)
-  }).requestAccessToken({ prompt: 'select_account' });
-};
-$('disconnect').onclick = () => {
-  token = ''; expires = 0; $('drive-files').replaceChildren(new Option('파일 선택', '')); controls();
-  message('Drive 연결을 해제했습니다. 이미 불러온 계좌 원본과 작업 목록은 화면에 유지됩니다.');
-};
-$('drive-files').onchange = controls;
-$('refresh').onclick = () => run(listDriveFiles);
-$('load-drive').onclick = () => {
-  const id = $('drive-files').value;
-  if (!id) return;
-  const name = $('drive-files').selectedOptions[0].textContent;
+$('cloud-source').onclick = () => run(async () => {
+  const ticket = generation, {store} = await session.getCloud();
+  const data = await store.readAccounts(cloudUser.uid);
+  if (ticket === generation) setSource(data.rows, 'Firestore 계좌정보');
+});
+$('week-date').value = nextSunday();
+$('week-list').onchange = controls;
+$('week-refresh').onclick = () => run(refreshWeeks);
+$('week-save').onclick = () => run(async () => {
+  const date = validateSunday($('week-date').value), ticket = generation;
+  if (loadedWeek?.date === date && !await ask(`${date}에 저장된 기록을 현재 작업 목록으로 수정할까요?`)) return;
+  const expected = loadedWeek?.date === date ? loadedWeek.version : 0;
+  const {store} = await session.getCloud();
+  const version = await store.saveWeek(cloudUser.uid, date, rows, expected);
+  if (ticket !== generation) return;
+  loadedWeek = {date, version}; dirty = false; renderGrid();
+  $('week-status').textContent = `${date} · ${rows.length}건 저장 완료 (버전 ${version})`;
+  await refreshWeeks(); showToast(`${date} 기록이 저장되었습니다.`);
+}, weekFailure);
+$('week-load').onclick = async () => {
+  const date = $('week-list').value; if (!date) return;
+  if (rows.length && !await ask('현재 작업 목록을 선택한 주일의 기록으로 교체할까요? 미저장 자료는 JSON으로 먼저 백업하세요.')) return;
   run(async () => {
-    const response = await drive(`files/${encodeURIComponent(id)}?alt=media`);
-    const text = await response.text();
-    if (new Blob([text]).size > 5 * 1024 * 1024) throw new Error('5MB 이하의 계좌 원본을 선택하세요.');
-    setSource(parseAccounts(text), name);
-  });
+    const ticket = generation, {store} = await session.getCloud();
+    const data = await store.readWeek(cloudUser.uid, date);
+    if (ticket !== generation) return;
+    if (!data.exists) throw new Error('선택한 기록이 없습니다. 목록을 새로고침하세요.');
+    rows = data.rows; loadedWeek = {date, version: data.version}; $('week-date').value = date;
+    dirty = false; renderGrid(); $('week-status').textContent = `${date} · ${rows.length}건 불러옴 (버전 ${data.version})`;
+    message('당시 계좌정보와 금액으로 복원했습니다. 현재 기준 계좌를 수정해도 과거 기록은 유지됩니다.');
+  }, weekFailure);
+};
+$('week-new').onclick = async () => {
+  if (rows.length && !await ask('작업 목록을 비우고 새 주일 작업을 시작할까요? 저장한 과거 기록은 유지됩니다.')) return;
+  rows = []; loadedWeek = null; dirty = false; $('week-date').value = nextSunday();
+  $('week-list').value = ''; $('week-status').textContent = '새 작업입니다. 주일 날짜를 확인하고 작업 후 저장하세요.'; renderGrid();
 };
 $('source-file').onchange = event => {
   const file = event.target.files[0]; if (!file) return;
@@ -252,6 +267,7 @@ $('import-json').onchange = async event => {
   if (rows.length && !await ask('하단 작업 목록을 JSON 파일의 내용으로 교체할까요? 필요한 내용은 먼저 JSON Export로 보관하세요.')) { event.target.value = ''; return; }
   await run(async () => {
     const parsed = await readLocal(file, parseTransferRows); rows = parsed; dirty = false; renderGrid();
+    $('week-status').textContent = 'JSON에서 가져온 작업 목록입니다. 날짜를 확인하고 주일별 저장을 누르세요.';
     message(`${file.name}에서 작업 목록 ${rows.length}건을 불러왔습니다. 계좌 원본은 유지됩니다.`);
   });
   event.target.value = '';

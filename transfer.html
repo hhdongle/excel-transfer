@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>주일경상비 이체파일 생성 | Excel Transfer</title>
   <link rel="stylesheet" href="transfer.css?v=20261109-toast">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <link rel="stylesheet" href="cloud.css?v=20261110">
   <script src="vendor/xlsx-style.bundle.js" defer></script>
-  <script type="module" src="transfer.js?v=20261109-toast"></script>
+  <script type="module" src="transfer.js?v=20261110-cloud"></script>
 </head>
 <body>
   <header><div class="wrap"><a href="index.html">EXCEL TRANSFER</a><span>교회 재정 업무</span></div></header>
@@ -15,14 +15,16 @@
     <a href="index.html">← 전체 메뉴</a>
     <h1>주일경상비 이체파일 생성</h1>
     <p class="intro">계좌 원본에서 필요한 항목을 찾아 작업 목록에 추가하세요.</p>
+    <section class="panel" id="cloud-auth" aria-label="Firebase 로그인"></section>
     <section class="panel" aria-labelledby="source-heading">
-      <div class="heading"><h2 id="source-heading">1. 계좌 원본 불러오기</h2><span id="source-count">0건</span></div>
-      <p>계좌정보 입력 페이지에서 만든 Drive JSON 또는 PC에 저장한 계좌정보 JSON을 불러오세요.</p>
-      <div class="actions"><button id="connect" type="button">Google Drive 연결</button><button id="disconnect" type="button" class="secondary" disabled>연결 해제</button><span id="connection">연결 안 됨</span></div>
-      <div class="file-row"><label for="drive-files">Drive JSON</label><select id="drive-files" disabled><option value="">파일 선택</option></select><button id="refresh" class="secondary" disabled>목록 새로고침</button><button id="load-drive" class="secondary" disabled>원본 불러오기</button></div>
-      <div class="actions"><label class="file-label">PC에서 계좌 원본 JSON 불러오기<input id="source-file" type="file" accept=".json,application/json"></label></div>
-      <p id="source-info" class="hint">아직 계좌 원본을 불러오지 않았습니다.</p>
-      <p class="hint">원본은 검색에만 사용합니다. 작업 목록을 바꾸거나 내보내도 Drive의 계좌정보는 변경되지 않습니다.</p>
+      <div class="heading"><h2 id="source-heading">1. 계좌 원본</h2><span id="source-count">0건</span></div>
+      <div class="actions"><button id="cloud-source" disabled>Firestore 계좌정보 다시 불러오기</button><label class="file-label">PC에서 계좌 원본 JSON 불러오기<input id="source-file" type="file" accept=".json,application/json"></label></div>
+      <p id="source-info" class="hint">로그인하면 계좌 원본을 자동으로 불러옵니다.</p><p class="hint">원본은 검색에만 사용합니다. 과거 이체 기록은 저장 당시 계좌정보를 보존합니다.</p>
+    </section>
+    <section class="panel"><h2>주일별 저장과 조회</h2>
+      <div class="cloud-actions"><label>주일 날짜 <input id="week-date" type="date"></label><button id="week-save" disabled>주일별 저장</button><button id="week-new" class="secondary">새 주일 작업</button></div>
+      <div class="cloud-actions"><label for="week-list">과거 기록</label><select id="week-list" disabled><option value="">저장된 주일 선택</option></select><button id="week-load" class="secondary" disabled>선택한 주일 불러오기</button><button id="week-refresh" class="secondary" disabled>기록 새로고침</button></div>
+      <p id="week-status" role="status">일요일 날짜별로 저장합니다. 금액이 미입력인 초안도 저장할 수 있습니다.</p>
     </section>
     <section class="panel" aria-labelledby="grid-heading">
       <div class="heading"><h2 id="grid-heading">2. 작업 목록 <span id="grid-count">0건</span></h2><span id="dirty">변경 사항 없음</span></div>
@@ -32,7 +34,7 @@
       <p id="amount-total" class="amount-total" aria-live="polite">합계 0원</p>
       <div class="table-scroll"><table><caption class="sr-only">주일경상비 작업 목록</caption><thead><tr><th scope="col">순번</th><th scope="col">은행</th><th scope="col">계좌번호</th><th scope="col">이름</th><th scope="col">기타</th><th scope="col">금액 (원)</th><th scope="col">관리</th></tr></thead><tbody id="grid-rows"></tbody></table></div>
       <p id="empty" class="empty">추가된 항목이 없습니다.</p>
-      <p class="hint">작업 목록은 이 페이지를 닫으면 사라집니다. JSON Export로 보관하면 나중에 이어서 작업할 수 있습니다.</p>
+      <p class="hint">작업 후 주일별 저장 또는 JSON Export를 누르세요. 저장된 주일을 선택하면 당시 목록을 다시 불러올 수 있습니다.</p>
     </section>
 	
     <section class="panel" aria-labelledby="search-heading">
