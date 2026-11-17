@@ -1,4 +1,7 @@
 import { parseTSV, serializeTSV, columnName, sortSheetRows } from './sheet-data.js?v=20261110-convert';
+import { createIncomeResolution } from './income-resolution-data.js?v=20261117';
+
+const incomeResolution = document.body.dataset.mode === 'income-resolution';
 
 const MAX_ROWS = 2000, MAX_COLS = 100, MAX_CELLS = 40000;
 let hasData = false;
@@ -218,7 +221,7 @@ for (const section of document.querySelectorAll('.sheet')) {
       });
       render(); viewport.scrollTop = 0; viewport.scrollLeft = 0;
       viewport.focus({ preventScroll: true });
-      status.textContent = sortEnabled.checked ? `${columnName(Number(sortColumn.value))}열 ${sortDirection.selectedOptions[0].textContent} 정렬 결과입니다. Ctrl+Z로 되돌릴 수 있습니다.` : '변경 전 내용을 원래 순서대로 복사했습니다. Ctrl+Z로 되돌릴 수 있습니다.';
+      status.textContent = incomeResolution ? '세입결의서를 생성했습니다. 지출은 과목별 합계이며 적요는 직접 입력하세요. 결과 수정 후 합계는 자동 재계산되지 않습니다.' : sortEnabled.checked ? `${columnName(Number(sortColumn.value))}열 ${sortDirection.selectedOptions[0].textContent} 정렬 결과입니다. Ctrl+Z로 되돌릴 수 있습니다.` : '변경 전 내용을 원래 순서대로 복사했습니다. Ctrl+Z로 되돌릴 수 있습니다.';
     }
   });
   render(); historyButtons();
@@ -226,6 +229,18 @@ for (const section of document.querySelectorAll('.sheet')) {
 
 document.getElementById('convert').onclick = () => {
   const snapshot = sheetControllers.get('left').snapshot();
+  if (incomeResolution) {
+    try {
+      const matrix = Array.from({ length: snapshot.height }, (_, r) => Array.from({ length: snapshot.width }, (_, c) => snapshot.data.get(`${r}:${c}`) ?? ''));
+      const result = createIncomeResolution(matrix);
+      const data = new Map();
+      result.forEach((row,r) => row.forEach((text,c) => { if (text) data.set(`${r}:${c}`,text); }));
+      sheetControllers.get('right').replace({ data, height: Math.max(50,result.length), width: 7 });
+    } catch (error) {
+      document.querySelector('[data-sheet="right"] .sheet-status').textContent = `변경 실패: ${error.message}`;
+    }
+    return;
+  }
   if (sortEnabled.checked && snapshot.data.size) {
     const rowIndexes = Array.from(snapshot.data.keys(), id => Number(id.split(':')[0]));
     const first = Math.min(...rowIndexes), last = Math.max(...rowIndexes);
